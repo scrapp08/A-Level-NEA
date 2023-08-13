@@ -3,71 +3,90 @@ class_name TerrainGeneration
 extends MeshInstance3D
 
 @export_category("Mesh")
-@export var size := Vector2(20,20) :
+@export var size := Vector2(100,100) :
 	set(value):
 		size = value
-		clear_vert_vis()
-		generate_terrain()
-@export_range(0.01, 1.0, 0.01) var height_scale : float :
+		clear_vertices()
+		generate_mesh()
+@export_range(0, 20, 1) var amplitude : float :
 	set(value):
-		height_scale = value
-		clear_vert_vis()
-		generate_terrain()
+		amplitude = value
+		clear_vertices()
+		generate_mesh()
 @export var render_vertices : bool :
 	set(value):
 		render_vertices = value
-		clear_vert_vis()
-		generate_terrain()
+		clear_vertices()
+		generate_mesh()
 @export_category("Noise")
 @export_range(0.01, 5, 0.01) var noise_scale : float = 0.5 :
 	set(value):
 		noise_scale = value
-		display_noise_map()
+		generate_terrain()
 @export_range(1, 10, 1) var octaves : int :
 	set(value):
 		octaves = value
-		display_noise_map()
+		generate_terrain()
 @export_range(0, 1, 0.01) var persistance : float :
 	set(value):
 		persistance = value
-		display_noise_map()
+		generate_terrain()
 @export_range(1, 10, 0.01) var lacunarity : float :
 	set(value):
 		lacunarity = value
-		display_noise_map()
+		generate_terrain()
 @export_range(0, 100, 1) var map_seed : int :
 	set(value):
 		map_seed = value
-		display_noise_map()
+		generate_terrain()
 @export var map_offset := Vector2(0, 0):
 	set(value):
 		map_offset = value
-		display_noise_map()
+		generate_terrain()
+@export_category("Falloff")
+@export var falloff : bool :
+	set(value):
+		falloff = value
+		generate_terrain()
+@export_range(0.0, 1.0, 0.001) var falloff_start : float :
+	set(value):
+		falloff_start = value
+		generate_terrain()
+		clear_vertices()
+		generate_mesh()
+@export_range(0.0, 1.0, 0.001) var falloff_end : float :
+	set(value):
+		falloff_end = value
+		generate_terrain()
+		clear_vertices()
+		generate_mesh()
 
 @onready var array_mesh : ArrayMesh
-@onready var surftool := SurfaceTool.new()
-@onready var mesh_shader = preload("res://assets/shaders/island/island_mesh.gdshader")
 @onready var texture_material := StandardMaterial3D.new()
-@onready var mesh_material := ShaderMaterial.new()
-@onready var mesh_noise := NoiseTexture2D.new()
+@onready var noise_map : Noise
+@onready var falloff_map : Array
+
 
 func _ready():
-	clear_vert_vis()
 	generate_terrain()
-	display_noise_map()
+	clear_vertices()
+	generate_mesh()
 
 
-func clear_vert_vis():
+func clear_vertices():
 	for i in get_children():
 			i.free()
 
 
-func generate_terrain():
+func generate_mesh():
+	if not is_node_ready(): return
+	
+	var surftool = SurfaceTool.new()
 	surftool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	
 	for z in range(size.y + 1):
 		for x in range(size.x + 1):
-			var y = 0
+			var y = (noise_map.get_noise_2d(x, z) - falloff_map[x][z]) * amplitude * 2.5
 			
 			var uv = Vector2()
 			uv.x = inverse_lerp(0, size.x, x)
@@ -89,35 +108,31 @@ func generate_terrain():
 			surftool.add_index(vert + size.x + 2)
 			vert += 1
 		vert += 1
+		
 	surftool.generate_normals()
 	array_mesh = surftool.commit()
-	
 	mesh = array_mesh
 
+
 # Draws spheres at vertices
-func draw_sphere(pos : Vector3):
-	var ins = MeshInstance3D.new()
-	add_child(ins)
-	ins.position = pos
+func draw_sphere(position : Vector3):
+	var instance = MeshInstance3D.new()
+	add_child(instance)
+	instance.position = position
 	var sphere = SphereMesh.new()
 	sphere.radius = 0.1
 	sphere.height = 0.2
-	ins.mesh = sphere
+	instance.mesh = sphere
 
-func display_noise_map() -> void:
+
+func generate_terrain() -> void:
 	if not is_node_ready(): return
 	
-	var noise_map := NoiseGenerator.generate_noise_map(noise_scale, octaves, persistance, lacunarity, map_seed, map_offset)
-# Convert noise to texture
-	var noise_texture := TextureGenerator.generate_noise_texture(noise_map, size.x, size.y, map_offset.x, map_offset.y)
+	noise_map = NoiseGenerator.generate_noise_map(noise_scale, octaves, persistance, lacunarity, map_seed, map_offset)
+	if falloff: falloff_map = FalloffGenerator.generate_falloff_map(size, falloff_start, falloff_end)
+# Convert noise to material
+	var noise_texture := TextureGenerator.generate_texture(noise_map, size.x, size.y, falloff, falloff_map)
 	texture_material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
 	texture_material.albedo_texture = noise_texture
-	
 	set_surface_override_material(0, texture_material)
-	mesh.size = size
-# Mesh
-	mesh_noise.set_noise(noise_map)
-	mesh.set_material(mesh_material)
-	mesh_material.set_shader(mesh_shader)
-	mesh_material.set_shader_parameter("noise", mesh_noise)
-	mesh_material.set_shader_parameter("height_scale", height_scale)
+
