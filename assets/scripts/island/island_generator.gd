@@ -38,7 +38,7 @@ extends Node3D
 	set(value):
 		map_seed = value
 		generate_island()
-@export var map_offset := Vector2(0, 0):
+@export var map_offset := Vector2i(0, 0):
 	set(value):
 		map_offset = value
 		generate_island()
@@ -66,7 +66,12 @@ func _ready() -> void:
 func generate_island() -> void:
 	if not is_node_ready(): return
 	
-	var noise_map := NoiseGenerator.generate_noise_map(mesh_size + Vector2i.ONE, map_seed, noise_scale, octaves, persistance, lacunarity)
+	var noise_map := NoiseGenerator.generate_noise_map(mesh_size + Vector2i.ONE, map_seed, noise_scale, octaves, persistance, lacunarity, map_offset)
+	if falloff:
+		var falloff_map = FalloffGenerator.generate_falloff_map(mesh_size + Vector2i.ONE, falloff_start, falloff_end)
+		for y in mesh_size.y:
+			for x in mesh_size.x:
+				noise_map[x + mesh_size.x * y] = noise_map[x + mesh_size.x * y] - falloff_map[x + mesh_size.x * y]
 	island_mesh.mesh = MeshGenerator.generate_mesh(mesh_size, noise_map, mesh_amplitude, render_vertices, island_mesh)
 	island_mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(mesh_size + Vector2i.ONE, noise_map))
 
