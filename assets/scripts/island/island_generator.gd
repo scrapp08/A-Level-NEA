@@ -56,7 +56,7 @@ extends Node3D
 		falloff_end = value
 		generate_island()
 
-@onready var island_mesh = %MeshInstance3D
+@onready var island_mesh := %MeshInstance3D
 
 
 func _ready() -> void:
@@ -65,7 +65,8 @@ func _ready() -> void:
 
 func generate_island() -> void:
 	if not is_node_ready(): return
-	var noise_map = NoiseGenerator.generate_noise_map(mesh_size, noise_scale)
+	
+	var noise_map := NoiseGenerator.generate_noise_map(mesh_size, map_seed, noise_scale)
 
 
 func _clear_vertices() -> void:
