@@ -1,5 +1,5 @@
 @tool
-class_name TerrainGeneration
+class_name TerrainGenerator
 extends MeshInstance3D
 
 @export_category("Mesh")
@@ -76,42 +76,6 @@ func _ready():
 func clear_vertices():
 	for i in get_children():
 			i.free()
-
-
-func generate_mesh():
-	if not is_node_ready(): return
-	
-	var surftool = SurfaceTool.new()
-	surftool.begin(Mesh.PRIMITIVE_TRIANGLES)
-	
-	for z in range(size.y + 1):
-		for x in range(size.x + 1):
-			var y = (noise_map.get_noise_2d(x, z) - falloff_map[x][z]) * amplitude * 2.5
-			
-			var uv = Vector2()
-			uv.x = inverse_lerp(0, size.x, x)
-			uv.y = inverse_lerp(0, size.y, z)
-			surftool.set_uv(uv)
-			
-			surftool.add_vertex(Vector3(x,y,z))
-			if render_vertices:
-				draw_sphere(Vector3(x,y,z))
-	
-	var vert = 0
-	for y in size.y:
-		for x in size.x:
-			surftool.add_index(vert + 0)
-			surftool.add_index(vert + 1)
-			surftool.add_index(vert + size.x + 1)
-			surftool.add_index(vert + size.x + 1)
-			surftool.add_index(vert + 1)
-			surftool.add_index(vert + size.x + 2)
-			vert += 1
-		vert += 1
-		
-	surftool.generate_normals()
-	array_mesh = surftool.commit()
-	mesh = array_mesh
 
 
 # Draws spheres at vertices
