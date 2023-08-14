@@ -66,9 +66,9 @@ func _ready() -> void:
 func generate_island() -> void:
 	if not is_node_ready(): return
 	
-	var noise_map := NoiseGenerator.generate_noise_map(mesh_size, map_seed, noise_scale, octaves, persistance, lacunarity)
+	var noise_map := NoiseGenerator.generate_noise_map(mesh_size + Vector2i.ONE, map_seed, noise_scale, octaves, persistance, lacunarity)
 	island_mesh.mesh = MeshGenerator.generate_mesh(mesh_size, noise_map, mesh_amplitude, render_vertices, island_mesh)
-	island_mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(mesh_size, noise_map))
+	island_mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(mesh_size + Vector2i.ONE, noise_map))
 
 
 func _clear_vertices() -> void:

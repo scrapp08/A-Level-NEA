@@ -6,8 +6,8 @@ static func generate_mesh(mesh_size : Vector2i, noise_map : Array, amplitude : i
 	var array_mesh = ArrayMesh.new()
 	surftool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	
-	for z in mesh_size.y:
-		for x in mesh_size.x:
+	for z in mesh_size.y + 1:
+		for x in mesh_size.x + 1:
 			var y = noise_map[x + mesh_size.x * z] * amplitude * 2.5
 			
 			var uv = Vector2()
