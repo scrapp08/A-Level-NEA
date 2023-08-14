@@ -1,31 +1,33 @@
 class_name MeshGenerator
 
-static func generate_mesh(size, noise_map, falloff_map, amplitude, render_vertices : bool, array_mesh):
+
+static func generate_mesh(mesh_size : Vector2i, noise_map : Array, amplitude : int, render_vertices : bool, mesh_instance : MeshInstance3D) -> ArrayMesh:
 	var surftool = SurfaceTool.new()
+	var array_mesh = ArrayMesh.new()
 	surftool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	
-	for z in range(size.y + 1):
-		for x in range(size.x + 1):
-			var y = (noise_map.get_noise_2d(x, z) - falloff_map[x][z]) * amplitude * 2.5
+	for z in mesh_size.y:
+		for x in mesh_size.x:
+			var y = noise_map[x + mesh_size.x * z] * amplitude * 2.5
 			
 			var uv = Vector2()
-			uv.x = inverse_lerp(0, size.x, x)
-			uv.y = inverse_lerp(0, size.y, z)
+			uv.x = inverse_lerp(0, mesh_size.x, x)
+			uv.y = inverse_lerp(0, mesh_size.y, z)
 			surftool.set_uv(uv)
 			
 			surftool.add_vertex(Vector3(x,y,z))
 			if render_vertices:
-				draw_sphere(Vector3(x,y,z))
+				draw_sphere(Vector3(x,y,z), mesh_instance)
 	
 	var vert = 0
-	for y in size.y:
-		for x in size.x:
+	for y in mesh_size.y:
+		for x in mesh_size.x:
 			surftool.add_index(vert + 0)
 			surftool.add_index(vert + 1)
-			surftool.add_index(vert + size.x + 1)
-			surftool.add_index(vert + size.x + 1)
+			surftool.add_index(vert + mesh_size.x + 1)
+			surftool.add_index(vert + mesh_size.x + 1)
 			surftool.add_index(vert + 1)
-			surftool.add_index(vert + size.x + 2)
+			surftool.add_index(vert + mesh_size.x + 2)
 			vert += 1
 		vert += 1
 		
@@ -33,9 +35,10 @@ static func generate_mesh(size, noise_map, falloff_map, amplitude, render_vertic
 	array_mesh = surftool.commit()
 	return array_mesh
 
-static func draw_sphere(position : Vector3):
+
+static func draw_sphere(position : Vector3, mesh_instance : MeshInstance3D):
 	var instance = MeshInstance3D.new()
-	add_child(instance)
+	mesh_instance.add_child(instance)
 	instance.position = position
 	var sphere = SphereMesh.new()
 	sphere.radius = 0.1

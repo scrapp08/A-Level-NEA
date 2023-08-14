@@ -7,13 +7,14 @@ extends Node3D
 	set(value):
 		mesh_size = value
 		generate_island()
-@export_range(0, 20, 1) var mesh_amplitude : float :
+@export_range(0, 20, 1) var mesh_amplitude : int :
 	set(value):
 		mesh_amplitude = value
 		generate_island()
 @export var render_vertices : bool :
 	set(value):
 		render_vertices = value
+		_clear_vertices()
 		generate_island()
 
 @export_category("Noise")
@@ -25,7 +26,7 @@ extends Node3D
 	set(value):
 		octaves = value
 		generate_island()
-@export_range(0, 1, 0.01) var persistance : float :
+@export_range(0.000001, 1, 0.01) var persistance : float :
 	set(value):
 		persistance = value
 		generate_island()
@@ -58,17 +59,19 @@ extends Node3D
 
 @onready var island_mesh := %MeshInstance3D
 
-
 func _ready() -> void:
-	pass
+	generate_island()
 
 
 func generate_island() -> void:
 	if not is_node_ready(): return
 	
-	var noise_map := NoiseGenerator.generate_noise_map(mesh_size, map_seed, noise_scale)
+	var noise_map := NoiseGenerator.generate_noise_map(mesh_size, map_seed, noise_scale, octaves, persistance, lacunarity)
+	island_mesh.mesh = MeshGenerator.generate_mesh(mesh_size, noise_map, mesh_amplitude, render_vertices, island_mesh)
+	island_mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(mesh_size, noise_map))
 
 
 func _clear_vertices() -> void:
-	for i in get_children():
+	if not is_node_ready(): return
+	for i in island_mesh.get_children():
 			i.free()
