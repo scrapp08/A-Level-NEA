@@ -61,6 +61,15 @@ extends Node3D
 		falloff_end = value
 		generate_island()
 
+@export_category("Island shader")
+@export var terrain_colour : GradientTexture1D :
+	set(value):
+		terrain_colour = value
+		generate_island()
+
+var min_height = 0
+var max_height = 1
+
 @onready var island_mesh := %MeshInstance3D
 
 func _ready() -> void:
@@ -72,16 +81,34 @@ func generate_island() -> void:
 	
 	var noise_map := NoiseGenerator.generate_noise_map(mesh_size + Vector2i.ONE, map_seed, noise_scale, octaves, persistance, lacunarity, map_offset)
 	var falloff_map = FalloffGenerator.generate_falloff_map(mesh_size, falloff_start, falloff_end)
+# Combine noise and falloff maps
 	if falloff:
 		for y in mesh_size.y:
 			for x in mesh_size.x:
-				noise_map[x + mesh_size.x * y] = noise_map[x + mesh_size.x * y] - falloff_map[x + mesh_size.x * y]
-	island_mesh.mesh = MeshGenerator.generate_mesh(mesh_size, noise_map, mesh_amplitude, render_vertices, island_mesh)
-	if render_mode == 1:
+				noise_map[x + (mesh_size.x + 1) * y] = noise_map[x + (mesh_size.x + 1) * y] - falloff_map[x + mesh_size.x * y]
+	var mesh : Array = MeshGenerator.generate_mesh(mesh_size, noise_map, mesh_amplitude, render_vertices, island_mesh, min_height, max_height)
+	island_mesh.mesh = mesh[0]
+	min_height = mesh[1]
+	max_height = mesh[2]
+	
+# Render island shader
+	if render_mode == 0:
+		var island_material := ShaderMaterial.new()
+		var island_shader := preload("res://assets/shaders/island/island.gdshader")
+		
+		island_material.set_shader(island_shader)
+		island_material.set_shader_parameter("min_height", min_height)
+		island_material.set_shader_parameter("max_height", max_height)
+		island_material.set_shader_parameter("terrain_colour", terrain_colour)
+		
+		island_mesh.set_surface_override_material(0, island_material)
+# Render noise
+	elif render_mode == 1:
 		island_mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(mesh_size, noise_map))
-	if render_mode == 2 and falloff:
+# Render falloff
+	elif render_mode == 2 and falloff:
 		island_mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(mesh_size, falloff_map))
-
+	
 
 func _clear_vertices() -> void:
 	if not is_node_ready(): return

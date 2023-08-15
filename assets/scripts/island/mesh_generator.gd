@@ -1,7 +1,7 @@
 class_name MeshGenerator
 
 
-static func generate_mesh(mesh_size : Vector2i, noise_map : Array, amplitude : int, render_vertices : bool, mesh_instance : MeshInstance3D) -> ArrayMesh:
+static func generate_mesh(mesh_size : Vector2i, noise_map : Array, amplitude : int, render_vertices : bool, mesh_instance : MeshInstance3D, min_height : int, max_height : int) -> Array:
 	var surftool = SurfaceTool.new()
 	var array_mesh = ArrayMesh.new()
 	surftool.begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -13,6 +13,13 @@ static func generate_mesh(mesh_size : Vector2i, noise_map : Array, amplitude : i
 	for z in vertex_count.y:
 		for x in vertex_count.x:
 			var y = noise_map[x + vertex_count.x * z] * amplitude * 2.5
+			
+# Set min and max height
+			if y < min_height and y != null:
+				min_height = y
+			if y > max_height and y != null:
+				max_height = y
+			
 			
 			var uv = Vector2()
 			uv.x = inverse_lerp(0, mesh_size.x, x)
@@ -37,7 +44,7 @@ static func generate_mesh(mesh_size : Vector2i, noise_map : Array, amplitude : i
 		
 	surftool.generate_normals()
 	array_mesh = surftool.commit()
-	return array_mesh
+	return [array_mesh, min_height, max_height]
 
 
 static func draw_sphere(position : Vector3, mesh_instance : MeshInstance3D):
