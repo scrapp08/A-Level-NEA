@@ -7,7 +7,13 @@ static func generate_material_from_map(texture_size : Vector2i, map : Array) -> 
 	colour_map.resize(texture_size.x * texture_size.y)
 	for y in texture_size.y:
 		for x in texture_size.x:
-			colour_map[y * texture_size.x + x] = Color.WHITE.lerp(Color.BLACK, map[x + texture_size.x * y])
+			var t: float = 0.25 * (
+				map[(x + 0) + (texture_size.x + 1) * (y + 0)] +
+				map[(x + 1) + (texture_size.x + 1) * (y + 0)] +
+				map[(x + 0) + (texture_size.x + 1) * (y + 1)] +
+				map[(x + 1) + (texture_size.x + 1) * (y + 1)]
+			)
+			colour_map[y * texture_size.x + x] = Color.WHITE.lerp(Color.BLACK, t)
 			image.set_pixel(x, y, colour_map[y * texture_size.x + x])
 	
 	var texture := ImageTexture.create_from_image(image)

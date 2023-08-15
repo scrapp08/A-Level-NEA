@@ -73,7 +73,7 @@ func generate_island() -> void:
 			for x in mesh_size.x:
 				noise_map[x + mesh_size.x * y] = noise_map[x + mesh_size.x * y] - falloff_map[x + mesh_size.x * y]
 	island_mesh.mesh = MeshGenerator.generate_mesh(mesh_size, noise_map, mesh_amplitude, render_vertices, island_mesh)
-	island_mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(mesh_size + Vector2i.ONE, noise_map))
+	island_mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(mesh_size, noise_map))
 
 
 func _clear_vertices() -> void:
