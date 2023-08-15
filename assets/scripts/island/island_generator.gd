@@ -80,12 +80,12 @@ func generate_island() -> void:
 	if not is_node_ready(): return
 	
 	var noise_map := NoiseGenerator.generate_noise_map(mesh_size + Vector2i.ONE, map_seed, noise_scale, octaves, persistance, lacunarity, map_offset)
-	var falloff_map = FalloffGenerator.generate_falloff_map(mesh_size, falloff_start, falloff_end)
+	var falloff_map = FalloffGenerator.generate_falloff_map(mesh_size + Vector2i.ONE, falloff_start, falloff_end)
 # Combine noise and falloff maps
 	if falloff:
 		for y in mesh_size.y:
 			for x in mesh_size.x:
-				noise_map[x + (mesh_size.x + 1) * y] = noise_map[x + (mesh_size.x + 1) * y] - falloff_map[x + mesh_size.x * y]
+				noise_map[x + (mesh_size.x + 1) * y] = noise_map[x + (mesh_size.x + 1) * y] - falloff_map[x + (mesh_size.x + 1) * y]
 	var mesh : Array = MeshGenerator.generate_mesh(mesh_size, noise_map, mesh_amplitude, render_vertices, island_mesh, min_height, max_height)
 	island_mesh.mesh = mesh[0]
 	min_height = mesh[1]
@@ -94,7 +94,7 @@ func generate_island() -> void:
 # Render island shader
 	if render_mode == 0:
 		var island_material := ShaderMaterial.new()
-		var island_shader := preload("res://assets/shaders/island/island.gdshader")
+		var island_shader := preload("res://assets/shaders/island/island_texture.gdshader")
 		
 		island_material.set_shader(island_shader)
 		island_material.set_shader_parameter("min_height", min_height)
