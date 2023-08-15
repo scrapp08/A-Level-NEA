@@ -20,15 +20,14 @@ static func generate_mesh(mesh_size : Vector2i, noise_map : Array, amplitude : i
 			if y > max_height and y != null:
 				max_height = y
 			
-			
 			var uv = Vector2()
 			uv.x = inverse_lerp(0, mesh_size.x, x)
 			uv.y = inverse_lerp(0, mesh_size.y, z)
 			surftool.set_uv(uv)
 			
-			surftool.add_vertex(Vector3(x,y,z))
+			surftool.add_vertex(Vector3(x, y, z))
 			if render_vertices:
-				draw_sphere(Vector3(x,y,z), mesh_instance)
+				draw_sphere(Vector3(x, y, z), mesh_instance)
 	
 	var vert = 0
 	for y in mesh_size.y:

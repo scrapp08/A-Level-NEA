@@ -1,9 +1,9 @@
 shader_type spatial;
 
-uniform sampler2D terrain_colour;
+uniform float min_height;
+uniform float max_height;
 
-uniform float min_height = 0;
-uniform float max_height = 1;
+uniform sampler2D terrain_colour;
 
 varying float vertex_y;
 

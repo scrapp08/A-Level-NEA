@@ -3,9 +3,9 @@ class_name IslandGenerator
 extends Node3D
 
 @export_category("Mesh")
-@export var mesh_size := Vector2i(100,100) :
+@export var size := Vector2i(100,100) :
 	set(value):
-		mesh_size = value
+		size = value
 		generate_island()
 @export_range(0, 20, 1) var mesh_amplitude : int :
 	set(value):
@@ -20,6 +20,9 @@ extends Node3D
 		render_vertices = value
 		_clear_vertices()
 		generate_island()
+@export var collision : bool :
+	set(value):
+		collision = value
 
 @export_category("Noise")
 @export_range(0.01, 5, 0.01) var noise_scale : float = 0.5 :
@@ -67,8 +70,8 @@ extends Node3D
 		terrain_colour = value
 		generate_island()
 
-var min_height = 0
-var max_height = 1
+var min_height : int = 0
+var max_height : int = 1
 
 @onready var island_mesh := %MeshInstance3D
 
@@ -79,14 +82,14 @@ func _ready() -> void:
 func generate_island() -> void:
 	if not is_node_ready(): return
 	
-	var noise_map := NoiseGenerator.generate_noise_map(mesh_size + Vector2i.ONE,map_seed, noise_scale, octaves, persistance, lacunarity, map_offset)
-	var falloff_map = FalloffGenerator.generate_falloff_map(mesh_size + Vector2i.ONE, falloff_start, falloff_end)
+	var noise_map := NoiseGenerator.generate_noise_map(size + Vector2i.ONE,map_seed, noise_scale, octaves, persistance, lacunarity, map_offset)
+	var falloff_map = FalloffGenerator.generate_falloff_map(size + Vector2i.ONE, falloff_start, falloff_end)
 # Combine noise and falloff maps
 	if falloff:
-		for y in mesh_size.y + 1:
-			for x in mesh_size.x + 1:
-				noise_map[x + (mesh_size.x + 1) * y] = noise_map[x + (mesh_size.x + 1) * y] - falloff_map[x + (mesh_size.x + 1) * y]
-	var mesh : Array = MeshGenerator.generate_mesh(mesh_size, noise_map, mesh_amplitude, render_vertices, island_mesh, min_height, max_height)
+		for y in size.y + 1:
+			for x in size.x + 1:
+				noise_map[x + (size.x + 1) * y] = noise_map[x + (size.x + 1) * y] - falloff_map[x + (size.x + 1) * y]
+	var mesh : Array = MeshGenerator.generate_mesh(size, noise_map, mesh_amplitude, render_vertices, island_mesh, min_height, max_height)
 	island_mesh.mesh = mesh[0]
 	min_height = mesh[1]
 	max_height = mesh[2]
@@ -94,7 +97,7 @@ func generate_island() -> void:
 # Render island shader
 	if render_mode == 0:
 		var island_material := ShaderMaterial.new()
-		var island_shader := preload("res://assets/shaders/island/island_texture.gdshader")
+		var island_shader := preload("res://assets/shaders/island/island_colour.gdshader")
 		
 		island_material.set_shader(island_shader)
 		island_material.set_shader_parameter("min_height", min_height)
@@ -104,11 +107,16 @@ func generate_island() -> void:
 		island_mesh.set_surface_override_material(0, island_material)
 # Render noise
 	elif render_mode == 1:
-		island_mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(mesh_size, noise_map, render_mode))
+		island_mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(size, noise_map, render_mode))
 # Render falloff
 	elif render_mode == 2 and falloff:
-		island_mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(mesh_size, falloff_map, render_mode))
+		island_mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(size, falloff_map, render_mode))
 	
+	
+	if island_mesh.get_child_count() > 0:
+		island_mesh.get_child(0).queue_free()
+	if collision:
+		island_mesh.create_trimesh_collision()
 
 func _clear_vertices() -> void:
 	if not is_node_ready(): return
