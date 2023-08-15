@@ -5,6 +5,7 @@ static func generate_material_from_map(texture_size : Vector2i, map : Array) -> 
 	var image := Image.create(texture_size.x, texture_size.y, false, Image.FORMAT_RGBA8)
 	var colour_map : Array[Color] = []
 	colour_map.resize(texture_size.x * texture_size.y)
+	
 	for y in texture_size.y:
 		for x in texture_size.x:
 			var t: float = 0.25 * (

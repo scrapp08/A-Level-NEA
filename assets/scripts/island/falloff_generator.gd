@@ -2,7 +2,7 @@ class_name FalloffGenerator
 
 static func generate_falloff_map(size : Vector2i, falloff_start : float, falloff_end : float) -> Array:
 	var height_map := []
-	height_map.resize(size.x * size.y)
+	height_map.resize((size.x + 1) * (size.y + 1))
 
 	for x in size.x:
 		for y in size.y:

@@ -6,9 +6,13 @@ static func generate_mesh(mesh_size : Vector2i, noise_map : Array, amplitude : i
 	var array_mesh = ArrayMesh.new()
 	surftool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	
-	for z in mesh_size.y + 1:
-		for x in mesh_size.x + 1:
-			var y = noise_map[x + mesh_size.x * z] * amplitude * 2.5
+	var vertex_count : Vector2i
+	vertex_count.x = mesh_size.x + 1
+	vertex_count.y = mesh_size.y + 1
+	
+	for z in vertex_count.y:
+		for x in vertex_count.x:
+			var y = noise_map[x + vertex_count.x * z] * amplitude * 2.5
 			
 			var uv = Vector2()
 			uv.x = inverse_lerp(0, mesh_size.x, x)
