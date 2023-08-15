@@ -1,7 +1,7 @@
 class_name MaterialGenerator
 
 
-static func generate_material_from_map(texture_size : Vector2i, map : Array) -> StandardMaterial3D:
+static func generate_material_from_map(texture_size : Vector2i, map : Array, render_mode : int) -> StandardMaterial3D:
 	var image := Image.create(texture_size.x, texture_size.y, false, Image.FORMAT_RGBA8)
 	var colour_map : Array[Color] = []
 	colour_map.resize(texture_size.x * texture_size.y)
@@ -14,7 +14,10 @@ static func generate_material_from_map(texture_size : Vector2i, map : Array) -> 
 				map[(x + 0) + (texture_size.x + 1) * (y + 1)] +
 				map[(x + 1) + (texture_size.x + 1) * (y + 1)]
 			)
-			colour_map[y * texture_size.x + x] = Color.WHITE.lerp(Color.BLACK, t)
+			if render_mode == 1:
+				colour_map[y * texture_size.x + x] = Color.BLACK.lerp(Color.WHITE, t)
+			else:
+				colour_map[y * texture_size.x + x] = Color.WHITE.lerp(Color.BLACK, t)
 			image.set_pixel(x, y, colour_map[y * texture_size.x + x])
 	
 	var texture := ImageTexture.create_from_image(image)

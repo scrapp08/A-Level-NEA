@@ -79,12 +79,12 @@ func _ready() -> void:
 func generate_island() -> void:
 	if not is_node_ready(): return
 	
-	var noise_map := NoiseGenerator.generate_noise_map(mesh_size + Vector2i.ONE, map_seed, noise_scale, octaves, persistance, lacunarity, map_offset)
+	var noise_map := NoiseGenerator.generate_noise_map(mesh_size + Vector2i.ONE,map_seed, noise_scale, octaves, persistance, lacunarity, map_offset)
 	var falloff_map = FalloffGenerator.generate_falloff_map(mesh_size + Vector2i.ONE, falloff_start, falloff_end)
 # Combine noise and falloff maps
 	if falloff:
-		for y in mesh_size.y:
-			for x in mesh_size.x:
+		for y in mesh_size.y + 1:
+			for x in mesh_size.x + 1:
 				noise_map[x + (mesh_size.x + 1) * y] = noise_map[x + (mesh_size.x + 1) * y] - falloff_map[x + (mesh_size.x + 1) * y]
 	var mesh : Array = MeshGenerator.generate_mesh(mesh_size, noise_map, mesh_amplitude, render_vertices, island_mesh, min_height, max_height)
 	island_mesh.mesh = mesh[0]
@@ -104,10 +104,10 @@ func generate_island() -> void:
 		island_mesh.set_surface_override_material(0, island_material)
 # Render noise
 	elif render_mode == 1:
-		island_mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(mesh_size, noise_map))
+		island_mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(mesh_size, noise_map, render_mode))
 # Render falloff
 	elif render_mode == 2 and falloff:
-		island_mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(mesh_size, falloff_map))
+		island_mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(mesh_size, falloff_map, render_mode))
 	
 
 func _clear_vertices() -> void:
