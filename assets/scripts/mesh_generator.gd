@@ -1,7 +1,7 @@
 class_name MeshGenerator
 
 
-static func generate_mesh(size : int, resolution : int, render_vertices : bool, mesh : MeshInstance3D) -> ArrayMesh:
+static func generate_mesh(size : int,resolution : int,noise_map : Array,amplitude : int,render_vertices : bool,mesh : MeshInstance3D) -> ArrayMesh:
 	var array_mesh : ArrayMesh
 	var surf_tool := SurfaceTool.new()
 	surf_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -18,7 +18,7 @@ static func generate_mesh(size : int, resolution : int, render_vertices : bool, 
 			var point_on_mesh := Vector3((percent.x - 0.5),0,(percent.y - 0.5))
 			# get vertex position
 			var vertex := point_on_mesh * size
-			vertex.y = 0
+			vertex.y = noise_map[vertex.x + vertex_count.x * vertex.z] * amplitude * 2.5
 			
 			var uv := Vector2()
 			uv.x = percent.x
@@ -28,7 +28,7 @@ static func generate_mesh(size : int, resolution : int, render_vertices : bool, 
 			surf_tool.add_vertex(vertex)
 			
 			if render_vertices:
-				_render_vertex_points(vertex, mesh)
+				_render_vertex_points(vertex,mesh)
 	
 	var vert = 0
 	for y in resolution:
@@ -47,7 +47,7 @@ static func generate_mesh(size : int, resolution : int, render_vertices : bool, 
 	return array_mesh
 
 
-static func _render_vertex_points(vertex : Vector3, mesh : MeshInstance3D) -> void:
+static func _render_vertex_points(vertex : Vector3,mesh : MeshInstance3D) -> void:
 	var instance = MeshInstance3D.new()
 	mesh.add_child(instance)
 	instance.position = vertex
