@@ -67,6 +67,13 @@ extends Node3D
 	set(value):
 		render_mode = value
 		generate_island()
+@export var terrain_colour : GradientTexture1D :
+	set(value):
+		terrain_colour = value
+		generate_island()
+
+var min_height : int
+var max_height : int
 
 @onready var mesh := $MeshInstance3D
 
@@ -86,10 +93,18 @@ func generate_island() -> void:
 			for x in resolution + 1:
 				noise_map[x + (resolution + 1) * y] = noise_map[x + (resolution + 1) * y] - falloff_map[x + (resolution + 1) * y]
 
-	mesh.mesh = MeshGenerator.generate_mesh(size, resolution, noise_map, amplitude, render_vertices, mesh)
+	mesh.mesh = MeshGenerator.generate_mesh(size, resolution, noise_map, amplitude, render_vertices, mesh, min_height, max_height)
 
 	if render_mode == 0:
-		pass
+		var material := ShaderMaterial.new()
+		var shader := preload("res://assets/shaders/island.gdshader")
+
+		material.set_shader(shader)
+		material.set_shader_parameter("min_height", min_height)
+		material.set_shader_parameter("max_height", max_height)
+		material.set_shader_parameter("terrain_colour", terrain_colour)
+
+		mesh.set_surface_override_material(0, material)
 	elif render_mode == 1:
 		mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(resolution, noise_map, render_mode))
 	elif render_mode == 2:
