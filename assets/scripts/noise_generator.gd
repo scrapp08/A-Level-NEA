@@ -1,7 +1,7 @@
 class_name NoiseGenerator
 
 
-static func generate_noise_map(size : int, resolution: int, noise_seed : int,noise_scale : float,octaves : int,persistance : float,lacunarity : float,offset : Vector2i) -> Array:
+static func generate_noise_map(size : int, resolution: int, noise_seed : int, noise_scale : float, octaves : int, persistance : float, lacunarity : float, offset : Vector2i) -> Array:
 	# generate noise using FastNoiseLite library
 	var noise := FastNoiseLite.new()
 	noise.noise_type = FastNoiseLite.TYPE_PERLIN

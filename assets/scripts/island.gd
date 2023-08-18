@@ -48,6 +48,25 @@ extends Node3D
 		offset = value
 		generate_island()
 
+@export_category("Falloff")
+@export var falloff : bool :
+	set(value):
+		falloff = value
+		generate_island()
+@export_range(0.0, 1.0, 0.001) var falloff_start : float :
+	set(value):
+		falloff_start = value
+		generate_island()
+@export_range(0.0, 1.0, 0.001) var falloff_end : float :
+	set(value):
+		falloff_end = value
+		generate_island()
+
+@export_category("Shader")
+@export_enum("Island", "Noise", "Falloff") var render_mode : int :
+	set(value):
+		render_mode = value
+		generate_island()
 
 @onready var mesh := $MeshInstance3D
 
@@ -59,9 +78,22 @@ func _ready() -> void:
 func generate_island() -> void:
 	if not is_node_ready(): return
 
-	var noise_map := NoiseGenerator.generate_noise_map(size,resolution,noise_seed,noise_scale,octaves,persistance,lacunarity,offset)
-	mesh.mesh = MeshGenerator.generate_mesh(size,resolution,noise_map,amplitude,render_vertices,mesh)
-	mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(resolution,noise_map))
+	var noise_map := NoiseGenerator.generate_noise_map(size, resolution, noise_seed, noise_scale, octaves, persistance, lacunarity, offset)
+	var falloff_map := FalloffGenerator.generate_falloff_map(size, resolution, falloff_start, falloff_end)
+
+	if falloff:
+		for y in resolution + 1:
+			for x in resolution + 1:
+				noise_map[x + (resolution + 1) * y] = noise_map[x + (resolution + 1) * y] - falloff_map[x + (resolution + 1) * y]
+
+	mesh.mesh = MeshGenerator.generate_mesh(size, resolution, noise_map, amplitude, render_vertices, mesh)
+
+	if render_mode == 0:
+		pass
+	elif render_mode == 1:
+		mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(resolution, noise_map, render_mode))
+	elif render_mode == 2:
+		mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(resolution, falloff_map, render_mode))
 
 
 func _clear_vertices() -> void:

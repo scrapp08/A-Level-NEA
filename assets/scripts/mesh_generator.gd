@@ -1,7 +1,7 @@
 class_name MeshGenerator
 
 
-static func generate_mesh(size : int,resolution : int,noise_map : Array,amplitude : int,render_vertices : bool,mesh : MeshInstance3D) -> ArrayMesh:
+static func generate_mesh(size : int, resolution : int, noise_map : Array, amplitude : int, render_vertices : bool, mesh : MeshInstance3D) -> ArrayMesh:
 	var array_mesh : ArrayMesh
 	var surf_tool := SurfaceTool.new()
 	surf_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
