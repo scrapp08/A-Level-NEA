@@ -1,7 +1,7 @@
 class_name MeshGenerator
 
 
-static func generate_mesh(size : int, resolution : int, noise_map : Array, amplitude : int, render_vertices : bool, mesh : MeshInstance3D, min_height : int, max_height : int) -> ArrayMesh:
+static func generate_mesh(size : int, resolution : int, noise_map : Array, amplitude : int, render_vertices : bool, mesh : MeshInstance3D, min_height : int, max_height : int) -> Array:
 	var array_mesh : ArrayMesh
 	var surf_tool := SurfaceTool.new()
 	surf_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -21,9 +21,9 @@ static func generate_mesh(size : int, resolution : int, noise_map : Array, ampli
 			vertex_position.y = noise_map[x + vertex_count.x * z] * amplitude * 2.5
 
 			if vertex_position.y < min_height and vertex_position.y != null:
-				min_height = vertex_position.y
+				min_height = vertex_position.y - 3
 			if vertex_position.y > max_height and vertex_position.y != null:
-				max_height = vertex_position.y
+				max_height = vertex_position.y + 3
 
 			var uv := Vector2()
 			uv.x = percent.x
@@ -49,7 +49,8 @@ static func generate_mesh(size : int, resolution : int, noise_map : Array, ampli
 
 	surf_tool.generate_normals()
 	array_mesh = surf_tool.commit()
-	return array_mesh
+	var array := [array_mesh, min_height, max_height]
+	return array
 
 
 static func _render_vertex_points(vertex : Vector3,mesh : MeshInstance3D) -> void:

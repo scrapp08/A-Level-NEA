@@ -93,7 +93,11 @@ func generate_island() -> void:
 			for x in resolution + 1:
 				noise_map[x + (resolution + 1) * y] = noise_map[x + (resolution + 1) * y] - falloff_map[x + (resolution + 1) * y]
 
-	mesh.mesh = MeshGenerator.generate_mesh(size, resolution, noise_map, amplitude, render_vertices, mesh, min_height, max_height)
+	var mesh_array  = MeshGenerator.generate_mesh(size, resolution, noise_map, amplitude, render_vertices, mesh, min_height, max_height)
+	mesh.mesh = mesh_array[0]
+	min_height = mesh_array[1]
+	max_height = mesh_array[2]
+
 
 	if render_mode == 0:
 		var material := ShaderMaterial.new()
