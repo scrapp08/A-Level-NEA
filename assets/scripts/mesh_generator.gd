@@ -5,11 +5,11 @@ static func generate_mesh(size : int,resolution : int,noise_map : Array,amplitud
 	var array_mesh : ArrayMesh
 	var surf_tool := SurfaceTool.new()
 	surf_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
-	
+
 	var vertex_count : Vector2i
 	vertex_count.x = resolution + 1
 	vertex_count.y = resolution + 1
-	
+
 	for z in vertex_count.y:
 		for x in vertex_count.x:
 			# get the percentage of the current point
@@ -17,19 +17,19 @@ static func generate_mesh(size : int,resolution : int,noise_map : Array,amplitud
 			# create point on mesh and offset by -0.5 to centre origin
 			var point_on_mesh := Vector3((percent.x - 0.5),0,(percent.y - 0.5))
 			# get vertex position
-			var vertex := point_on_mesh * size
-			vertex.y = noise_map[vertex.x + vertex_count.x * vertex.z] * amplitude * 2.5
-			
+			var vertex_position := point_on_mesh * size
+			vertex_position.y = noise_map[x + vertex_count.x * z] * amplitude * 2.5
+
 			var uv := Vector2()
 			uv.x = percent.x
 			uv.y = percent.y
-			
+
 			surf_tool.set_uv(uv)
-			surf_tool.add_vertex(vertex)
-			
+			surf_tool.add_vertex(vertex_position)
+
 			if render_vertices:
-				_render_vertex_points(vertex,mesh)
-	
+				_render_vertex_points(vertex_position,mesh)
+
 	var vert = 0
 	for y in resolution:
 		for x in resolution:
@@ -41,7 +41,7 @@ static func generate_mesh(size : int,resolution : int,noise_map : Array,amplitud
 			surf_tool.add_index(vert + resolution + 2)
 			vert += 1
 		vert += 1
-	
+
 	surf_tool.generate_normals()
 	array_mesh = surf_tool.commit()
 	return array_mesh
