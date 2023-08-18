@@ -1,0 +1,39 @@
+[gd_scene load_steps=7 format=3 uid="uid://7c8vter665dg"]
+
+[ext_resource type="PackedScene" uid="uid://8doh4v8jqvsa" path="res://assets/scenes/island.tscn" id="1_1ynqq"]
+[ext_resource type="Shader" path="res://assets/shaders/sky.gdshader" id="1_xrcky"]
+[ext_resource type="PackedScene" uid="uid://caqdou8xartau" path="res://assets/scenes/player.tscn" id="2_cn7hl"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8beau"]
+shader = ExtResource("1_xrcky")
+shader_parameter/day_top_colour = Color(0.1, 0.6, 1, 1)
+shader_parameter/day_bottom_colour = Color(0.4, 0.8, 1, 1)
+shader_parameter/horizon_colour = Color(0, 0.7, 0.8, 1)
+shader_parameter/horizon_blur = 0.05
+shader_parameter/sun_colour = Color(10, 8, 1, 1)
+shader_parameter/sun_size = 0.2
+shader_parameter/sun_blur = 10.0
+
+[sub_resource type="Sky" id="Sky_lfyge"]
+sky_material = SubResource("ShaderMaterial_8beau")
+
+[sub_resource type="Environment" id="Environment_h2j8t"]
+background_mode = 2
+sky = SubResource("Sky_lfyge")
+ambient_light_source = 3
+reflected_light_source = 2
+glow_enabled = true
+
+[node name="World" type="Node"]
+
+[node name="Island" parent="." instance=ExtResource("1_1ynqq")]
+
+[node name="Player" parent="." instance=ExtResource("2_cn7hl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 22.9069, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_h2j8t")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.999854, -5.55031e-17, -0.0170814, 0.0170814, -4.37114e-08, 0.999854, -7.46652e-10, -1, -4.3705e-08, 0, 0, 0)
+rotation_order = 4
