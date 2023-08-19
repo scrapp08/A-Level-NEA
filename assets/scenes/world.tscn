@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://7c8vter665dg"]
+[gd_scene load_steps=10 format=3 uid="uid://7c8vter665dg"]
 
 [ext_resource type="PackedScene" uid="uid://8doh4v8jqvsa" path="res://assets/scenes/island.tscn" id="1_1ynqq"]
 [ext_resource type="Shader" path="res://assets/shaders/sky.gdshader" id="1_xrcky"]
 [ext_resource type="PackedScene" uid="uid://caqdou8xartau" path="res://assets/scenes/player.tscn" id="2_cn7hl"]
+[ext_resource type="Shader" path="res://assets/shaders/water-dab.gdshader" id="4_w8dbw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8beau"]
 shader = ExtResource("1_xrcky")
@@ -24,9 +25,63 @@ ambient_light_source = 3
 reflected_light_source = 2
 glow_enabled = true
 
+[sub_resource type="PlaneMesh" id="PlaneMesh_dkiui"]
+size = Vector2(200, 200)
+subdivide_width = 500
+subdivide_depth = 500
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7it4m"]
+render_priority = 0
+shader = ExtResource("4_w8dbw")
+shader_parameter/_debug_dampen = false
+shader_parameter/_debug_depth_tex = false
+shader_parameter/_debug_fresnel = false
+shader_parameter/_debug_normal_frag = false
+shader_parameter/_debug_normal_vert = false
+shader_parameter/_debug_refract = false
+shader_parameter/_debug_refract_glitch = false
+shader_parameter/_debug_water_depth = false
+shader_parameter/_debug_water_height = false
+shader_parameter/_debug_ztest = false
+shader_parameter/dampening_uv_offset = Vector2(0.5, 0.5)
+shader_parameter/dampening_uv_scale = 0.04
+shader_parameter/dampening_scale = 2.08165e-12
+shader_parameter/dampening_offset = Vector2(0.5, 1)
+shader_parameter/dampening_ratio_wavelength = -1.0
+shader_parameter/dampening_ratio_steepness = 20.0
+shader_parameter/dampening_ratio_velocity = 1.0
+shader_parameter/shallow_color = Color(0, 0.5, 0.65, 0.8)
+shader_parameter/deep_color = Color(0.09, 0.24, 0.32, 1)
+shader_parameter/sss_enabled = true
+shader_parameter/sss_strength = 1.0
+shader_parameter/sss_color = Color(0.24, 0.88, 0.62, 0.8)
+shader_parameter/sss_trans_depth = 1000.0
+shader_parameter/sss_trans_boost = 1.0
+shader_parameter/test_back_light = false
+shader_parameter/test_backlight_color = Color(0, 0, 0, 1)
+shader_parameter/metallic = 0.0
+shader_parameter/roughness = 0.025
+shader_parameter/wave_a = Vector4(1, 2.08165e-12, 0.05, 50)
+shader_parameter/wave_a_on = true
+shader_parameter/wave_b = Vector4(0.5, 0.2, 0.1, 30)
+shader_parameter/wave_b_on = true
+shader_parameter/wave_c = Vector4(0.5, -0.2, 0.15, 60)
+shader_parameter/wave_c_on = true
+shader_parameter/wave_d = Vector4(0.82, 0.84, 0.07, 144)
+shader_parameter/wave_d_on = true
+shader_parameter/depth_fade_distance = 1.2
+shader_parameter/refraction_amount = 0.02
+shader_parameter/foam_color_edge = Color(1, 1, 1, 1)
+shader_parameter/foam_color_fresnel = Color(1, 1, 1, 1)
+shader_parameter/foam_scale = 0.25
+shader_parameter/foam_fresnel_smoothing = 0.0
+shader_parameter/wave_time_scale = 1.0
+
 [node name="World" type="Node"]
 
 [node name="Island" parent="." instance=ExtResource("1_1ynqq")]
+amplitude = 8
+lacunarity = 1.75
 
 [node name="Player" parent="." instance=ExtResource("2_cn7hl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 22.9069, 0)
@@ -37,3 +92,8 @@ environment = SubResource("Environment_h2j8t")
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.999854, -5.55031e-17, -0.0170814, 0.0170814, -4.37114e-08, 0.999854, -7.46652e-10, -1, -4.3705e-08, 0, 0, 0)
 rotation_order = 4
+
+[node name="Water" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 7.1488, 2.08165e-12)
+mesh = SubResource("PlaneMesh_dkiui")
+surface_material_override/0 = SubResource("ShaderMaterial_7it4m")
