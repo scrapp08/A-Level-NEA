@@ -16,10 +16,10 @@ static func generate_falloff_map(size : int, resolution : int, falloff_start : f
 
 			var t : float = max(abs(position.x), abs(position.y))
 			if t <= falloff_start:
-				height_map[sx + sample_count * sy] = 0
-			elif t >= falloff_end:
 				height_map[sx + sample_count * sy] = 1
+			elif t >= falloff_end:
+				height_map[sx + sample_count * sy] = 0
 			else:
-				height_map[sx + sample_count * sy] = smoothstep(0, 1, inverse_lerp(falloff_start, falloff_end, t))
+				height_map[sx + sample_count * sy] = smoothstep(1, 0, inverse_lerp(falloff_start, falloff_end, t))
 
 	return height_map

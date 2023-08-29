@@ -95,7 +95,7 @@ func generate_island() -> void:
 	if falloff:
 		for y in resolution + 1:
 			for x in resolution + 1:
-				noise_map[x + (resolution + 1) * y] = noise_map[x + (resolution + 1) * y] - falloff_map[x + (resolution + 1) * y]
+				noise_map[x + (resolution + 1) * y] = noise_map[x + (resolution + 1) * y] * falloff_map[x + (resolution + 1) * y]
 
 	var mesh_array  = MeshGenerator.generate_mesh(size, resolution, noise_map, amplitude, render_vertices, mesh, min_height, max_height)
 	mesh.mesh = mesh_array[0]
