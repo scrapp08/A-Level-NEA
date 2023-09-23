@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://dvpcb2etjexbj"]
+
+[ext_resource type="Shader" path="res://assets/shaders/sky.gdshader" id="1_nhgtx"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a1r18"]
+shader = ExtResource("1_nhgtx")
+shader_parameter/day_top_colour = Color(0.1, 0.6, 1, 1)
+shader_parameter/day_bottom_colour = Color(0.4, 0.8, 1, 1)
+shader_parameter/horizon_colour = Color(0, 0.7, 0.8, 1)
+shader_parameter/horizon_blur = 0.05
+shader_parameter/sun_colour = Color(10, 8, 1, 1)
+shader_parameter/sun_size = 0.2
+shader_parameter/sun_blur = 10.0
+
+[sub_resource type="Sky" id="Sky_lfyge"]
+sky_material = SubResource("ShaderMaterial_a1r18")
+
+[sub_resource type="Environment" id="Environment_18wnt"]
+background_mode = 2
+sky = SubResource("Sky_lfyge")
+ambient_light_source = 3
+reflected_light_source = 2
+glow_enabled = true
+volumetric_fog_density = 0.0
+
+[node name="Environment" type="Node"]
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.999854, -1.66509e-16, -0.0170814, 0.0170814, -4.37114e-08, 0.999854, -7.46652e-10, -1, -4.3705e-08, 0, 0, 0)
+rotation_order = 4
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_18wnt")
