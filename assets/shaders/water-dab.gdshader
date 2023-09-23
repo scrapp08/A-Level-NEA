@@ -16,7 +16,7 @@ uniform bool _debug_ztest = false;
 uniform sampler2D DEPTH_TEXTURE : hint_depth_texture, filter_linear_mipmap;
 uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
 
-uniform sampler2D dampening_map;
+uniform sampler2D dampening_map: repeat_disable, filter_linear_mipmap;
 uniform vec2 dampening_uv_offset = vec2(0.5,0.5);
 uniform float dampening_uv_scale = 0.04;
 uniform float dampening_scale = 1.0;
@@ -166,7 +166,6 @@ void vertex() {
 }
 
 void fragment() {
-
 	// FOAM EDGE CALCULATIONS
 	float foam_speed = 0.1;
 	float foam_proximity = 1.0;

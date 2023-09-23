@@ -20,7 +20,9 @@ static func generate_material_from_map(size : int, map : Array, render_mode : in
 				colour_map[y * size + x] = Color.WHITE.lerp(Color.BLACK, t)
 			image.set_pixel(x, y, colour_map[y * size + x])
 
+	image.save_png("res://assets/heightmap.png")
 	var texture := ImageTexture.create_from_image(image)
+
 	var material := StandardMaterial3D.new()
 	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
 	material.albedo_texture = texture
