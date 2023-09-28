@@ -5,7 +5,7 @@ extends Node
 @onready var hud: Control = $CanvasLayer/HUD
 @onready var health_bar: ProgressBar = $CanvasLayer/HUD/HealthBar
 
-const Player = preload("res://assets/scenes/player.tscn")
+const Player = preload("res://assets/scenes/player/player.tscn")
 const PORT = 9999
 
 var enet_peer = ENetMultiplayerPeer.new()

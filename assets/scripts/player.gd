@@ -30,7 +30,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		rotate_y(-event.relative.x * .0025)
 		camera_3d.rotate_x(-event.relative.y * .0025)
 		camera_3d.rotation.x = clamp(camera_3d.rotation.x, -PI/2, PI/2)
-	if Input.is_action_just_pressed("shoot") \
+	if Input.is_action_just_pressed("attack") \
 		and animation_player.current_animation != "shoot":
 		play_shoot_effects.rpc()
 		if ray_cast_3d.is_colliding():
