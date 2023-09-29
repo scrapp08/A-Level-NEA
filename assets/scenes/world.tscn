@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://d4nwrlltwj2of"]
+
+[ext_resource type="PackedScene" uid="uid://cqdhu80i4y0v0" path="res://assets/scenes/environment.tscn" id="1_45u85"]
+[ext_resource type="PackedScene" uid="uid://ryigc5xgsi20" path="res://assets/scenes/island.tscn" id="2_hwkxp"]
+
+[node name="World" type="Node"]
+
+[node name="Environment" parent="." instance=ExtResource("1_45u85")]
+
+[node name="Island" parent="." instance=ExtResource("2_hwkxp")]

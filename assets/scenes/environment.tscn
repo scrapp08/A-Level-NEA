@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://cqdhu80i4y0v0"]
+
+[ext_resource type="Shader" path="res://assets/shaders/sky.gdshader" id="1_y2gpm"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4t8qy"]
+shader = ExtResource("1_y2gpm")
+shader_parameter/day_top_colour = Color(0.101961, 0.6, 1, 1)
+shader_parameter/day_bottom_colour = Color(0.4, 0.8, 1, 1)
+shader_parameter/horizon_colour = Color(0, 0.701961, 0.8, 1)
+shader_parameter/horizon_blur = 0.05
+shader_parameter/sun_colour = Color(10, 8, 1, 1)
+shader_parameter/sun_size = 0.2
+shader_parameter/sun_blur = 10.0
+
+[sub_resource type="Sky" id="Sky_vm6fm"]
+sky_material = SubResource("ShaderMaterial_4t8qy")
+
+[sub_resource type="Environment" id="Environment_c0whc"]
+background_mode = 2
+sky = SubResource("Sky_vm6fm")
+ambient_light_source = 3
+reflected_light_source = 2
+glow_enabled = true
+
+[node name="Environment" type="Node"]
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.999848, 6.65779e-12, -0.0174524, 0.0174524, -7.62868e-10, 0.999848, -6.65779e-12, -1, -7.62868e-10, 0, 0, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_c0whc")
