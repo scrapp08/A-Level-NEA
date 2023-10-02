@@ -1,0 +1,64 @@
+[gd_scene load_steps=12 format=3 uid="uid://ryigc5xgsi20"]
+
+[ext_resource type="Script" path="res://assets/scripts/island_generation/island.gd" id="1_bnffu"]
+[ext_resource type="Shader" path="res://assets/shaders/island/heightmap.gdshader" id="2_q1bmq"]
+[ext_resource type="Shader" path="res://assets/shaders/island/terrain.gdshader" id="3_pub1n"]
+
+[sub_resource type="Gradient" id="Gradient_2t5oy"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1f8fx"]
+gradient = SubResource("Gradient_2t5oy")
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_4wabk"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_rlnr1"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3fdyo"]
+resource_local_to_scene = true
+shader = ExtResource("2_q1bmq")
+shader_parameter/noise = SubResource("PlaceholderTexture2D_rlnr1")
+shader_parameter/falloff = SubResource("PlaceholderTexture2D_4wabk")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_ofdmn"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_amxy2"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("3_pub1n")
+shader_parameter/amplitude = 0.0
+shader_parameter/height_map = SubResource("ViewportTexture_ofdmn")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_qyd1g"]
+material = SubResource("ShaderMaterial_amxy2")
+size = Vector2(150, 150)
+subdivide_width = 300
+subdivide_depth = 300
+
+[node name="Island" type="Node3D"]
+script = ExtResource("1_bnffu")
+amplitude = 10
+noise_scale = 0.25
+persistance = 0.630001
+lacunarity = 1.76
+falloff_end = 1.0
+render_mode = 2
+terrain_colour = SubResource("GradientTexture1D_1f8fx")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+unique_name_in_owner = true
+render_target_clear_mode = 1
+render_target_update_mode = 4
+
+[node name="ColorRect" type="ColorRect" parent="SubViewport"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_3fdyo")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+mesh = SubResource("PlaneMesh_qyd1g")
