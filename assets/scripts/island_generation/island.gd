@@ -67,9 +67,9 @@ extends Node3D
 		terrain_colour = value
 		_generate_island()
 
-@onready var mesh_instance := %MeshInstance3D
+@onready var mesh_instance := $MeshInstance3D
 @onready var mesh : PlaneMesh = mesh_instance.mesh
-@onready var color_rect := %ColorRect
+@onready var color_rect := $SubViewport/ColorRect
 @onready var terrain : ShaderMaterial = mesh.get_material()
 @onready var heightmap : ShaderMaterial = color_rect.get_material()
 
@@ -78,26 +78,26 @@ func _ready() -> void:
 	if not is_node_ready(): return
 	_generate_island()
 
+
 func _generate_island() -> void:
+	if not is_node_ready(): return
 	var noise_texture := NoiseTexture2D.new()
 	noise_texture.noise = NoiseGenerator.generate_noise_map(size, resolution, noise_seed, noise_scale, octaves, persistance, lacunarity, offset)
 	await noise_texture.changed
-	if render_mode == 1:
+	if render_mode == 0 or render_mode == 1:
 		heightmap.set_shader_parameter("noise", noise_texture)
 	elif render_mode == 2:
 		heightmap.set_shader_parameter("noise", PlaceholderTexture2D.new())
 
-
 	if falloff:
 		var falloff_map := FalloffGenerator.generate_falloff_map(size, resolution, falloff_start, falloff_end)
 		var falloff_texture := ImageGenerator.generate_image_from_map(size, falloff_map, render_mode)
-		heightmap.set_shader_parameter("falloff", falloff_texture)
+		terrain.set_shader_parameter("falloff_map", falloff_texture)
 	else:
-		heightmap.set_shader_parameter("falloff", PlaceholderTexture2D.new())
+		terrain.set_shader_parameter("falloff_map", PlaceholderTexture2D.new())
 
 	terrain.set_shader_parameter("amplitude", amplitude)
 
 	var viewport_texture := ViewportTexture.new()
 	viewport_texture.set_viewport_path_in_scene("SubViewport")
 	terrain.set_shader_parameter("height_map", viewport_texture)
-

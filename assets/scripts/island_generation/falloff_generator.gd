@@ -11,8 +11,8 @@ static func generate_falloff_map(size : int, resolution : int, falloff_start : f
 		for sx in sample_count:
 			var x: float = sx / float(sample_count - 1) * size
 			var position := Vector2(
-				float(x) / (size - 1) * 2 - 1,
-				float(y) / (size - 1) * 2 - 1)
+				float(sx) / (size - 1) * 2 - 1,
+				float(sy) / (size - 1) * 2 - 1)
 
 			var t : float = max(abs(position.x), abs(position.y))
 			if t <= falloff_start:

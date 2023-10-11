@@ -1,8 +1,8 @@
 shader_type spatial;
-
 render_mode world_vertex_coords;
 
 uniform sampler2D height_map : hint_default_black;
+uniform sampler2D falloff_map : hint_default_black;
 uniform float amplitude = 0.0;
 
 varying smooth vec3 vertex_position;
@@ -51,9 +51,8 @@ void vertex() {
 
 void fragment() {
 //	ALBEDO = srgb_to_linear(textureLod(height_map, vertex_position.xz, 0).rgb);
-	ALBEDO = sample_texture(height_map, vertex_position).rgb;
+	ALBEDO = sample_texture(height_map, vertex_position).rgb * sample_texture(falloff_map, vertex_position).rgb;
 	vec3 normals_frag = sample_normal(vertex_position);
 	normals_frag = xform(VIEW_MATRIX, normals_frag, 0.0).xyz;
 	NORMAL = normals_frag;
-
 }
