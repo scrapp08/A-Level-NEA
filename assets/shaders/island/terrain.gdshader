@@ -1,9 +1,9 @@
 shader_type spatial;
+
 render_mode world_vertex_coords;
 
 uniform sampler2D height_map : hint_default_black;
-uniform sampler2D falloff_map : hint_default_black;
-uniform float amplitude = 0.0;
+uniform float height_scale = 10.0;
 
 varying smooth vec3 vertex_position;
 
@@ -21,7 +21,7 @@ vec4 sample_texture(sampler2D texture_map, vec3 position) {
 
 	mat4 terrainToWorld = mat4(1);
 	terrainToWorld[0] *= scale.x*2.0;
-	terrainToWorld[1] *= amplitude;
+	terrainToWorld[1] *= height_scale;
 	terrainToWorld[2] *= scale.y*2.0;
 	terrainToWorld[3].xyz = vec3(-scale.x,0,-scale.y);
 
@@ -33,10 +33,10 @@ vec4 sample_texture(sampler2D texture_map, vec3 position) {
 
 vec3 sample_normal(vec3 position) {
 	float epsilon = 1.0;
-	float sample_left = sample_texture(height_map, position + vec3(-epsilon, 0, 0)).x * amplitude;
-	float sample_right = sample_texture(height_map, position + vec3(epsilon, 0, 0)).x * amplitude;
-	float sample_up = sample_texture(height_map, position + vec3(0, 0, -epsilon)).x * amplitude;
-	float sample_down = sample_texture(height_map, position + vec3(0, 0, epsilon)).x * amplitude;
+	float sample_left = sample_texture(height_map, position + vec3(-epsilon, 0, 0)).x * height_scale;
+	float sample_right = sample_texture(height_map, position + vec3(epsilon, 0, 0)).x * height_scale;
+	float sample_up = sample_texture(height_map, position + vec3(0, 0, -epsilon)).x * height_scale;
+	float sample_down = sample_texture(height_map, position + vec3(0, 0, epsilon)).x * height_scale;
 	vec2 g = vec2(sample_right-sample_left, sample_down-sample_up) / epsilon; //-Four Samples, difference across point
 	vec3 normals = normalize(vec3(-g.x, 1.0, -g.y));
 	return normals;
@@ -45,13 +45,13 @@ vec3 sample_normal(vec3 position) {
 void vertex() {
 	float value =  sample_texture(height_map, VERTEX).r;
 //	float value =  textureLod(height_map, UV, 0).r;
-	VERTEX.y = value * amplitude;
+	VERTEX.y = value * height_scale;
 	vertex_position = VERTEX;
 }
 
 void fragment() {
 //	ALBEDO = srgb_to_linear(textureLod(height_map, vertex_position.xz, 0).rgb);
-	ALBEDO = sample_texture(height_map, vertex_position).rgb * sample_texture(falloff_map, vertex_position).rgb;
+	ALBEDO = sample_texture(height_map, vertex_position).rgb;
 	vec3 normals_frag = sample_normal(vertex_position);
 	normals_frag = xform(VIEW_MATRIX, normals_frag, 0.0).xyz;
 	NORMAL = normals_frag;
