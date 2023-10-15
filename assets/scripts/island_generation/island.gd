@@ -85,6 +85,7 @@ func _generate_island() -> void:
 
 	# Mesh
 	island.set_shader_parameter("size", size)
+	island.set_shader_parameter("resolution", resolution)
 	island.set_shader_parameter("amplitude", amplitude)
 
 	# Noise

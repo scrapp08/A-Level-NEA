@@ -7,6 +7,7 @@ uniform bool debug_falloff = false;
 
 // Mesh
 uniform int size = 150;
+uniform int resolution = 300;
 uniform int amplitude = 0;
 
 // Noise
@@ -25,8 +26,8 @@ vec3 srgb_to_linear(vec3 c) {
 
 float falloff(float x, float y) {
 	vec2 position = vec2(
-		x / float(size - 1) * 2.0 - 1.0,
-		y / float(size - 1) * 2.0 - 1.0
+		x / float(resolution) * 2.0 - 1.0,
+		y / float(resolution) * 2.0 - 1.0
 	);
 
 	float t = max(abs(position.x), abs(position.y));

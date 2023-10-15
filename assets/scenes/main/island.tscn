@@ -8,14 +8,14 @@
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_1f8fx"]
 gradient = SubResource("Gradient_2t5oy")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_kyids"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_s8u77"]
 noise_type = 3
 frequency = 0.022
 fractal_lacunarity = 1.84
 fractal_gain = 0.410001
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xhein"]
-noise = SubResource("FastNoiseLite_kyids")
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_s6pf5"]
+noise = SubResource("FastNoiseLite_s8u77")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o6mdw"]
 render_priority = 0
@@ -23,11 +23,12 @@ shader = ExtResource("2_itim3")
 shader_parameter/debug_noise = true
 shader_parameter/debug_falloff = true
 shader_parameter/size = 150
+shader_parameter/resolution = 300
 shader_parameter/amplitude = 10
 shader_parameter/gen_falloff = true
-shader_parameter/falloff_start = 0.989
+shader_parameter/falloff_start = 0.995
 shader_parameter/falloff_end = 1.0
-shader_parameter/noise = SubResource("NoiseTexture2D_xhein")
+shader_parameter/noise = SubResource("NoiseTexture2D_s6pf5")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_qyd1g"]
 material = SubResource("ShaderMaterial_o6mdw")
@@ -42,7 +43,7 @@ noise_scale = 0.22
 persistance = 0.410001
 lacunarity = 1.84
 falloff = true
-falloff_start = 0.989
+falloff_start = 0.995
 falloff_end = 1.0
 render_mode = 2
 terrain_colour = SubResource("GradientTexture1D_1f8fx")
