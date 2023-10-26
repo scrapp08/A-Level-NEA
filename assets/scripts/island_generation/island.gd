@@ -71,6 +71,9 @@ extends Node3D
 @onready var mesh : PlaneMesh = mesh_instance.mesh
 @onready var island : ShaderMaterial = mesh.get_material()
 
+var min_height : int
+var max_height : int
+
 
 func _ready() -> void:
 	if not is_node_ready(): return
@@ -97,7 +100,12 @@ func _generate_island() -> void:
 	island.set_shader_parameter("falloff_end", falloff_end)
 
 	# Shader
-	if render_mode == 1:
+	if render_mode == 0:
+		island.set_shader_parameter("debug_noise", false)
+		island.set_shader_parameter("debug_falloff", false)
+	elif render_mode == 1:
 		island.set_shader_parameter("debug_noise", true)
+		island.set_shader_parameter("debug_falloff", false)
 	elif render_mode == 2:
+		island.set_shader_parameter("debug_noise", false)
 		island.set_shader_parameter("debug_falloff", true)

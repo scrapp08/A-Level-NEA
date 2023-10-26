@@ -3,32 +3,35 @@
 [ext_resource type="Script" path="res://assets/scripts/island_generation/island.gd" id="1_bnffu"]
 [ext_resource type="Shader" path="res://assets/shaders/island.gdshader" id="2_itim3"]
 
-[sub_resource type="Gradient" id="Gradient_2t5oy"]
+[sub_resource type="Gradient" id="Gradient_s0ik6"]
+offsets = PackedFloat32Array(0.488673, 0.521036)
+colors = PackedColorArray(0.729412, 0.705882, 0.262745, 1, 0, 0.419608, 0.0352941, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_1f8fx"]
-gradient = SubResource("Gradient_2t5oy")
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6kjaf"]
+gradient = SubResource("Gradient_s0ik6")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_s8u77"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_0ktrj"]
 noise_type = 3
 frequency = 0.022
 fractal_lacunarity = 1.84
 fractal_gain = 0.410001
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_s6pf5"]
-noise = SubResource("FastNoiseLite_s8u77")
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0cig2"]
+noise = SubResource("FastNoiseLite_0ktrj")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o6mdw"]
 render_priority = 0
 shader = ExtResource("2_itim3")
-shader_parameter/debug_noise = true
-shader_parameter/debug_falloff = true
+shader_parameter/debug_noise = false
+shader_parameter/debug_falloff = false
 shader_parameter/size = 150
 shader_parameter/resolution = 300
 shader_parameter/amplitude = 10
 shader_parameter/gen_falloff = true
-shader_parameter/falloff_start = 0.995
+shader_parameter/falloff_start = 0.903
 shader_parameter/falloff_end = 1.0
-shader_parameter/noise = SubResource("NoiseTexture2D_s6pf5")
+shader_parameter/max_height = 1.0
+shader_parameter/noise = SubResource("NoiseTexture2D_0cig2")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_qyd1g"]
 material = SubResource("ShaderMaterial_o6mdw")
@@ -43,10 +46,9 @@ noise_scale = 0.22
 persistance = 0.410001
 lacunarity = 1.84
 falloff = true
-falloff_start = 0.995
+falloff_start = 0.903
 falloff_end = 1.0
-render_mode = 2
-terrain_colour = SubResource("GradientTexture1D_1f8fx")
+terrain_colour = SubResource("GradientTexture1D_6kjaf")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_qyd1g")
