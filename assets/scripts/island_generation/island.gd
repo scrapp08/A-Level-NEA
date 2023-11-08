@@ -12,10 +12,13 @@ extends Node3D
 		resolution = value
 		mesh.set_subdivide_width(resolution)
 		mesh.set_subdivide_depth(resolution)
-@export_range(0, 20, 1) var amplitude := 0 :
+@export_range(0.0, 20.0, 1.0) var amplitude := 0.0 :
 	set(value):
 		amplitude = value
 		_generate_island()
+@export var collision : bool :
+	set(value):
+		collision = value
 
 @export_category("Noise")
 @export_range(0.01, 5, 0.01) var noise_scale := 0.5 :
@@ -77,18 +80,21 @@ var max_height : int
 
 func _ready() -> void:
 	if not is_node_ready(): return
-	_generate_island()
+	var noise_texture := await _generate_island()
+	if not Engine.is_editor_hint() and collision:
+		var generation_data = _generate_generation_data(noise_texture)
+		$StaticBody3D.generate_collision(generation_data)
 
 
-func _generate_island() -> void:
+func _generate_island() -> NoiseTexture2D:
 	if not is_node_ready(): return
 	var noise_texture := NoiseTexture2D.new()
 	noise_texture.noise = NoiseGenerator.generate_noise_map(size, resolution, noise_seed, noise_scale, octaves, persistance, lacunarity, offset)
 	await noise_texture.changed
 
 	# Mesh
-	island.set_shader_parameter("size", size)
-	island.set_shader_parameter("resolution", resolution)
+#	island.set_shader_parameter("size", size)
+#	island.set_shader_parameter("resolution", resolution)
 	island.set_shader_parameter("amplitude", amplitude)
 
 	# Noise
@@ -109,3 +115,12 @@ func _generate_island() -> void:
 	elif render_mode == 2:
 		island.set_shader_parameter("debug_noise", false)
 		island.set_shader_parameter("debug_falloff", true)
+
+	island.set_shader_parameter("terrain_colour", terrain_colour)
+
+	return noise_texture
+
+
+func _generate_generation_data(noise_texture) -> Array:
+	var generation_data := [size, resolution, amplitude, noise_texture, falloff, falloff_start, falloff_end]
+	return generation_data
