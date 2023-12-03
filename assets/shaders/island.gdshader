@@ -1,6 +1,8 @@
 shader_type spatial;
 render_mode world_vertex_coords;
 
+//#include "res://assets/shaders/heightmap.gdshaderinc"
+
 // Debug
 uniform bool debug_noise = false;
 uniform bool debug_falloff = false;
@@ -21,6 +23,8 @@ uniform float falloff_end = 1.0;
 uniform sampler2D terrain_colour;
 
 varying vec3 vertex_position;
+
+
 
 vec3 srgb_to_linear(vec3 c) {
 	return c * (c * (c * 0.305306011 + 0.682171111) + 0.012522878);

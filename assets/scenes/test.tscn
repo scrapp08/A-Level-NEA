@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://b3lrlpqn1ycke"]
+
+[ext_resource type="PackedScene" uid="uid://cqdhu80i4y0v0" path="res://assets/scenes/environment.tscn" id="1_mm8oe"]
+[ext_resource type="Texture2D" uid="uid://bbtm68xhlfl3k" path="res://addons/kenney_prototype_textures/dark/texture_09.png" id="2_ncrd0"]
+[ext_resource type="PackedScene" uid="uid://b6yto42nklo8v" path="res://assets/scenes/player/player.tscn" id="3_o6h15"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gq4fn"]
+albedo_texture = ExtResource("2_ncrd0")
+uv1_triplanar = true
+
+[node name="Main" type="Node"]
+
+[node name="Environment" parent="." instance=ExtResource("1_mm8oe")]
+
+[node name="World" type="Node3D" parent="."]
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="World"]
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+
+[node name="CSGBox3D" type="CSGBox3D" parent="World/CSGCombiner3D"]
+use_collision = true
+size = Vector3(500, 0.25, 500)
+material = SubResource("StandardMaterial3D_gq4fn")
+
+[node name="Player" parent="." instance=ExtResource("3_o6h15")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2.08165e-12, 0.15, 2.08165e-12)

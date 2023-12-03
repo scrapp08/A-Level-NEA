@@ -5,20 +5,20 @@
 [ext_resource type="Script" path="res://assets/scripts/island_generation/collider.gd" id="3_tuwhy"]
 
 [sub_resource type="Gradient" id="Gradient_s0ik6"]
-offsets = PackedFloat32Array(0.258621, 0.265509)
+offsets = PackedFloat32Array(0.258621, 0.282178)
 colors = PackedColorArray(0.413751, 0.366211, 0.114845, 1, 0.00542721, 0.212752, 3.27775e-08, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_6kjaf"]
 gradient = SubResource("Gradient_s0ik6")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_vs1sb"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xmsir"]
 noise_type = 3
 frequency = 0.017
 fractal_lacunarity = 1.0
 fractal_gain = 1.0
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bb1ot"]
-noise = SubResource("FastNoiseLite_vs1sb")
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_sphaj"]
+noise = SubResource("FastNoiseLite_xmsir")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o6mdw"]
 render_priority = 0
@@ -29,7 +29,7 @@ shader_parameter/amplitude = 10.0
 shader_parameter/gen_falloff = true
 shader_parameter/falloff_start = 0.5
 shader_parameter/falloff_end = 1.0
-shader_parameter/noise = SubResource("NoiseTexture2D_bb1ot")
+shader_parameter/noise = SubResource("NoiseTexture2D_sphaj")
 shader_parameter/terrain_colour = SubResource("GradientTexture1D_6kjaf")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_qyd1g"]

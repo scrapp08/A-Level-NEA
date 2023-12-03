@@ -2,30 +2,35 @@ extends CharacterBody3D
 
 signal health_changed(health_value)
 
-const SPEED = 10.0
-const JUMP_VELOCITY = 10.0
+const SPEED := 10.0
+const JUMP_VELOCITY := 10.0
 
-var gravity: float = 20.0
-var health = 3
+var gravity := 20.0
+var health := 3
+# Debug vars
+var debug_singleplayer := true
+var debug_flight := true
 
 @onready var camera_3d: Camera3D = $Camera3D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var muzzle_flash: GPUParticles3D = $Camera3D/Pistol/MuzzleFlash
 @onready var ray_cast_3d: RayCast3D = $Camera3D/RayCast3D
 
-
 func _enter_tree() -> void:
-	set_multiplayer_authority(str(name).to_int())
+	if not debug_singleplayer:
+		set_multiplayer_authority(str(name).to_int())
 
 
 func _ready() -> void:
-	if not is_multiplayer_authority(): return
+	if not debug_singleplayer:
+		if not is_multiplayer_authority(): return
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera_3d.current = true
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not is_multiplayer_authority(): return
+	if not debug_singleplayer:
+		if not is_multiplayer_authority(): return
 	if event is InputEventMouseMotion:
 		rotate_y(-event.relative.x * .0025)
 		camera_3d.rotate_x(-event.relative.y * .0025)
@@ -39,7 +44,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if not is_multiplayer_authority(): return
+	if not debug_singleplayer:
+		if not is_multiplayer_authority(): return
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta
