@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://cwt5s2s4and5x"]
 
-[ext_resource type="PackedScene" uid="uid://cqdhu80i4y0v0" path="res://assets/scenes/environment.tscn" id="1_4q7xw"]
-[ext_resource type="Script" path="res://assets/scripts/lobby.gd" id="1_yuyrd"]
-[ext_resource type="PackedScene" uid="uid://c17otorflu4bj" path="res://assets/scenes/lobby/map.tscn" id="2_nq584"]
+[ext_resource type="PackedScene" uid="uid://cqdhu80i4y0v0" path="res://scenes/environment.tscn" id="1_4q7xw"]
+[ext_resource type="Script" path="res://scripts/lobby.gd" id="1_yuyrd"]
+[ext_resource type="PackedScene" uid="uid://c17otorflu4bj" path="res://scenes/lobby/map.tscn" id="2_nq584"]
 [ext_resource type="Texture2D" uid="uid://cj7i30cfax434" path="res://addons/kenney_particle_pack/circle_05.png" id="4_kpvdk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yx4um"]

@@ -16,6 +16,7 @@ var debug_flight := true
 @onready var muzzle_flash: GPUParticles3D = $Camera3D/Pistol/MuzzleFlash
 @onready var ray_cast_3d: RayCast3D = $Camera3D/RayCast3D
 
+
 func _enter_tree() -> void:
 	if not debug_singleplayer:
 		set_multiplayer_authority(str(name).to_int())

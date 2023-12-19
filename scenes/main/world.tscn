@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://d4nwrlltwj2of"]
 
-[ext_resource type="PackedScene" uid="uid://cqdhu80i4y0v0" path="res://assets/scenes/environment.tscn" id="1_45u85"]
-[ext_resource type="PackedScene" uid="uid://ryigc5xgsi20" path="res://assets/scenes/main/island.tscn" id="2_hwkxp"]
-[ext_resource type="Shader" path="res://assets/shaders/water.gdshader" id="3_pt7oc"]
+[ext_resource type="PackedScene" uid="uid://cqdhu80i4y0v0" path="res://scenes/environment.tscn" id="1_45u85"]
+[ext_resource type="PackedScene" uid="uid://ryigc5xgsi20" path="res://scenes/main/island.tscn" id="2_hwkxp"]
+[ext_resource type="Shader" path="res://shaders/water.gdshader" id="3_pt7oc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hfu61"]
 render_priority = 0
