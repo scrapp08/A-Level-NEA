@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://blwx07j4okvds"]
+
+[ext_resource type="PackedScene" uid="uid://cqdhu80i4y0v0" path="res://objects/environment.tscn" id="1_4q7xw"]
+[ext_resource type="PackedScene" uid="uid://c5vn3oymsdtiu" path="res://models/lobby.glb" id="2_3ljrd"]
+[ext_resource type="PackedScene" uid="uid://cxaapo7l2o27j" path="res://objects/player.tscn" id="3_ig7hx"]
+
+[node name="Lobby" type="Node"]
+
+[node name="Environment" parent="." instance=ExtResource("1_4q7xw")]
+
+[node name="Map" parent="." instance=ExtResource("2_3ljrd")]
+
+[node name="Player" parent="." instance=ExtResource("3_ig7hx")]
+movement_speed = 6
+jump_strength = 9
+weapons = Array[Resource("res://scripts/weapon.gd")]([])

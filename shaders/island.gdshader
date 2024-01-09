@@ -108,6 +108,9 @@ void fragment() {
 	float noise_sample = textureLod(noise, UV, 0).r;
 	float position = inverse_lerp(0.0, float(amplitude) * 2.5, vertex_position.y);
 	ALBEDO = texture(terrain_colour, vec2(position, 0)).rgb;
+	if ((mod(vertex_position.x, 0.5) <= 0.1) || (mod(vertex_position.z, 0.5) <= 0.1)) {
+		ALBEDO = vec3(0);
+	}
 
 	if (debug_noise) {
 		ALBEDO = srgb_to_linear(vec3(noise_sample));

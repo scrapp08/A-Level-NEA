@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bnipeq300oa1l"]
+
+[ext_resource type="Texture2D" uid="uid://doxnuoagn5dnc" path="res://addons/kenney_prototype_textures/orange/texture_10.png" id="1_jwmwm"]
+
+[resource]
+resource_name = "Material.002"
+cull_mode = 2
+albedo_color = Color(0.906332, 0.906332, 0.906332, 1)
+albedo_texture = ExtResource("1_jwmwm")
+roughness = 0.5
+uv1_triplanar = true

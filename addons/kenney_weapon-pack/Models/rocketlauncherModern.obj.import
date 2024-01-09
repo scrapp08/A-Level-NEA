@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://ccdqmha8njqt8"
+path="res://.godot/imported/rocketlauncherModern.obj-77ee5eea4a4a916872dcbd1a8843397c.mesh"
+
+[deps]
+
+files=["res://.godot/imported/rocketlauncherModern.obj-77ee5eea4a4a916872dcbd1a8843397c.mesh"]
+
+source_file="res://addons/kenney_weapon-pack/Models/rocketlauncherModern.obj"
+dest_files=["res://.godot/imported/rocketlauncherModern.obj-77ee5eea4a4a916872dcbd1a8843397c.mesh", "res://.godot/imported/rocketlauncherModern.obj-77ee5eea4a4a916872dcbd1a8843397c.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

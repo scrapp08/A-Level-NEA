@@ -1,0 +1,63 @@
+[gd_scene load_steps=6 format=3 uid="uid://cxaapo7l2o27j"]
+
+[ext_resource type="Script" path="res://objects/player.gd" id="1_lic8r"]
+[ext_resource type="Texture2D" uid="uid://dx73ql05b6gyn" path="res://sprites/blob_shadow.png" id="2_kw8i1"]
+[ext_resource type="SpriteFrames" uid="uid://bv0x3qi82jh4e" path="res://sprites/burst_animation.tres" id="2_q2ieo"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_c1sq6"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qm214"]
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_lic8r")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
+mesh = SubResource("CapsuleMesh_c1sq6")
+
+[node name="Collider" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
+shape = SubResource("CapsuleShape3D_qm214")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.5, 2.08165e-12)
+
+[node name="Camera" type="Camera3D" parent="Head"]
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Head/Camera"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Head/Camera/SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+msaa_3d = 1
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="CameraItem" type="Camera3D" parent="Head/Camera/SubViewportContainer/SubViewport"]
+cull_mask = 1047554
+fov = 40.0
+
+[node name="Container" type="Node3D" parent="Head/Camera/SubViewportContainer/SubViewport/CameraItem"]
+
+[node name="Muzzle" type="AnimatedSprite3D" parent="Head/Camera/SubViewportContainer/SubViewport/CameraItem"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -0.75, -6)
+sprite_frames = ExtResource("2_q2ieo")
+frame = 2
+
+[node name="RayCast" type="RayCast3D" parent="Head/Camera"]
+exclude_parent = false
+target_position = Vector3(2.08165e-12, 2.08165e-12, -20)
+collide_with_areas = true
+
+[node name="Shadow" type="Decal" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -0.9, 2.08165e-12)
+size = Vector3(1, 2, 1)
+texture_albedo = ExtResource("2_kw8i1")
+modulate = Color(1, 1, 1, 0.705882)
+normal_fade = 0.5
