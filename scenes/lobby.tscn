@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://blwx07j4okvds"]
+[gd_scene load_steps=5 format=3 uid="uid://blwx07j4okvds"]
 
 [ext_resource type="PackedScene" uid="uid://cqdhu80i4y0v0" path="res://objects/environment.tscn" id="1_4q7xw"]
 [ext_resource type="PackedScene" uid="uid://c5vn3oymsdtiu" path="res://models/lobby.glb" id="2_3ljrd"]
 [ext_resource type="PackedScene" uid="uid://cxaapo7l2o27j" path="res://objects/player.tscn" id="3_ig7hx"]
+[ext_resource type="Material" uid="uid://byn2aqjkpe0fd" path="res://materials/weapons_bay.tres" id="4_3ymyf"]
 
 [node name="Lobby" type="Node"]
 
@@ -11,6 +12,19 @@
 [node name="Map" parent="." instance=ExtResource("2_3ljrd")]
 
 [node name="Player" parent="." instance=ExtResource("3_ig7hx")]
-movement_speed = 6
-jump_strength = 9
-weapons = Array[Resource("res://scripts/weapon.gd")]([])
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.5, 2.08165e-12)
+
+[node name="Weapons Bay" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2, -25)
+
+[node name="Sign" type="Label3D" parent="Weapons Bay"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 5, 2.08165e-12)
+billboard = 1
+text = "WEAPONS"
+font_size = 244
+
+[node name="Bay" type="CSGCylinder3D" parent="Weapons Bay"]
+radius = 1.0
+height = 0.25
+sides = 50
+material = ExtResource("4_3ymyf")

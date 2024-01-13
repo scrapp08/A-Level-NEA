@@ -17,18 +17,16 @@ var movement_velocity: Vector3
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 @onready var camera := $Head/Camera
-@onready var ray_cast := $Head/Camera/RayCast
-@onready var muzzle = $Head/Camera/SubViewportContainer/SubViewport/CameraItem/Muzzle
-@onready var container = $Head/Camera/SubViewportContainer/SubViewport/CameraItem/Container
+@onready var ray_cast := $Head/Camera/Aim
+@onready var reach := $Head/Camera/Reach
+@onready var muzzle := $Head/Camera/SubViewportContainer/SubViewport/CameraItem/Muzzle
+@onready var container := $Head/Camera/SubViewportContainer/SubViewport/CameraItem/Container
 
 @export var crosshair: TextureRect
 
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-
-	#weapon = weapons[weapon_index]
-#w	initiate_change_weapon(weapon_index)
 
 
 func _physics_process(delta: float) -> void:
@@ -54,4 +52,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		camera.rotation.x -= event.relative.y / mouse_sensitivity
 		camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-90), deg_to_rad(90))
 
+
+func _process(delta: float) -> void:
+	if reach.is_colliding():
+		if reach.get_collider().get_name() == "pass":
+			pass
 
