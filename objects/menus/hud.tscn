@@ -1,0 +1,181 @@
+[gd_scene load_steps=7 format=3 uid="uid://bt8tp4mf2mkmx"]
+
+[ext_resource type="Theme" uid="uid://c6gw6kxkem77m" path="res://themes/ui_theme.tres" id="1_ybg0d"]
+[ext_resource type="FontFile" uid="uid://cfdg5v55wvqlu" path="res://fonts/TF2Build.ttf" id="2_qwm6v"]
+[ext_resource type="FontFile" uid="uid://cdp64ei61n1i8" path="res://fonts/TF2Secondary.ttf" id="3_p8f5f"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jnbll"]
+bg_color = Color(0.227451, 0.333333, 0.396078, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_bottom = 2
+border_color = Color(0.894118, 0.866667, 0.729412, 1)
+corner_radius_top_left = 25
+corner_radius_bottom_left = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lxo15"]
+bg_color = Color(0.513726, 0.188235, 0.188235, 1)
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.894118, 0.866667, 0.729412, 1)
+corner_radius_top_right = 25
+corner_radius_bottom_right = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_poefg"]
+bg_color = Color(0.176471, 0.168627, 0.156863, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.894118, 0.866667, 0.729412, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[node name="HUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_ybg0d")
+
+[node name="Crosshair" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Health" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 480.0
+offset_top = 720.0
+offset_right = -1260.0
+offset_bottom = -240.0
+theme = ExtResource("1_ybg0d")
+theme_override_fonts/font = ExtResource("2_qwm6v")
+theme_override_font_sizes/font_size = 82
+text = "150"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Ammo" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1260.0
+offset_top = 720.0
+offset_right = -480.0
+offset_bottom = -240.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_ybg0d")
+theme_override_fonts/font = ExtResource("2_qwm6v")
+theme_override_font_sizes/font_size = 82
+text = "30"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="IP" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.031
+anchor_bottom = 0.056
+offset_right = -19.52
+offset_bottom = -44.48
+theme = ExtResource("1_ybg0d")
+theme_override_fonts/font = ExtResource("3_p8f5f")
+theme_override_font_sizes/font_size = 30
+text = "IP: 192.168.255.0"
+
+[node name="Scoreboard" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -180.0
+offset_top = 5.0
+offset_right = 180.0
+offset_bottom = 80.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="BlueScore" type="Panel" parent="Scoreboard"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_jnbll")
+
+[node name="Label" type="Label" parent="Scoreboard/BlueScore"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.504
+anchor_bottom = 0.875
+offset_left = 15.0
+offset_top = 5.0
+offset_right = -14.712
+offset_bottom = 10.375
+theme = ExtResource("1_ybg0d")
+theme_override_fonts/font = ExtResource("2_qwm6v")
+theme_override_font_sizes/font_size = 70
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="RedScore" type="Panel" parent="Scoreboard"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_lxo15")
+
+[node name="Label" type="Label" parent="Scoreboard/RedScore"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.496
+anchor_right = 1.0
+anchor_bottom = 0.875
+offset_left = 14.712
+offset_top = 5.0
+offset_right = -15.0
+offset_bottom = 10.375
+theme = ExtResource("1_ybg0d")
+theme_override_fonts/font = ExtResource("2_qwm6v")
+theme_override_font_sizes/font_size = 70
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="PlayingTo" type="Panel" parent="."]
+layout_mode = 2
+anchor_left = 0.437
+anchor_right = 0.561
+anchor_bottom = 0.056
+offset_left = 15.96
+offset_top = 2.0
+offset_right = -12.1201
+offset_bottom = 1.52
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_poefg")
+metadata/_edit_lock_ = true
+
+[node name="Label" type="Label" parent="PlayingTo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_ybg0d")
+theme_override_font_sizes/font_size = 27
+text = "Playing to: 4"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -2,7 +2,7 @@ extends Resource
 class_name Weapon
 
 @export_subgroup("Model")
-@export var model: ArrayMesh  # Model of the weapon
+@export var model: PackedScene  # Model of the weapon
 @export var position: Vector3  # On-screen position
 @export var rotation: Vector3  # On-screen rotation
 @export var muzzle_position: Vector3  # On-screen position of muzzle flash
