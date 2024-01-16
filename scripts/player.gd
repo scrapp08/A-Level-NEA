@@ -1,3 +1,4 @@
+# NEA
 extends CharacterBody3D
 
 signal health_changed(health_value)
@@ -8,7 +9,6 @@ signal health_changed(health_value)
 
 @export_group("Weapons")
 @export var weapons: Array[Weapon] = []
-
 
 var weapon: Weapon
 var weapon_index: int
@@ -38,7 +38,6 @@ func _ready() -> void:
 	if not is_multiplayer_authority(): return
 
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	camera.current = true
 
 	world.pause_status.connect(_on_pause_status)
 	paused = false

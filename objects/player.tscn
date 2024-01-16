@@ -1,7 +1,6 @@
-[gd_scene load_steps=26 format=3 uid="uid://cxaapo7l2o27j"]
+[gd_scene load_steps=25 format=3 uid="uid://cxaapo7l2o27j"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_lic8r"]
-[ext_resource type="Texture2D" uid="uid://dx73ql05b6gyn" path="res://sprites/blob_shadow.png" id="2_kw8i1"]
 [ext_resource type="SpriteFrames" uid="uid://bv0x3qi82jh4e" path="res://sprites/burst_animation.tres" id="2_q2ieo"]
 [ext_resource type="Texture2D" uid="uid://bfodffw286n7h" path="res://sprites/crosshair.png" id="2_qs543"]
 [ext_resource type="Script" path="res://scripts/weapon.gd" id="2_vtefu"]
@@ -233,11 +232,11 @@ script = ExtResource("1_lic8r")
 weapons = Array[ExtResource("2_vtefu")]([SubResource("Resource_kd011"), SubResource("Resource_viwle"), SubResource("Resource_bkm55"), SubResource("Resource_dn3vf"), SubResource("Resource_0xoq5")])
 
 [node name="Body" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.05, 2.08165e-12)
 mesh = SubResource("CapsuleMesh_c1sq6")
 
 [node name="Collider" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.05, 2.08165e-12)
 shape = SubResource("CapsuleShape3D_qm214")
 
 [node name="Head" type="Node3D" parent="."]
@@ -277,13 +276,6 @@ frame = 2
 exclude_parent = false
 target_position = Vector3(2.08165e-12, 2.08165e-12, -20)
 collide_with_areas = true
-
-[node name="Shadow" type="Decal" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -1.5, 2.08165e-12)
-size = Vector3(1, 2, 1)
-texture_albedo = ExtResource("2_kw8i1")
-modulate = Color(1, 1, 1, 0.705882)
-normal_fade = 0.5
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_7plbd")
