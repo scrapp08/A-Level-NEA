@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://dl2ed4gkybggf"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ujs4a"]
-[ext_resource type="Resource" uid="uid://cu2gtxlcmbb34" path="res://weapons/blaster-repeater.tres" id="2_6epbw"]
+[ext_resource type="Resource" uid="uid://dj8h5ciqbruho" path="res://weapons/sniper_rifle.tres" id="2_87pg6"]
 [ext_resource type="SpriteFrames" uid="uid://dbv3sy5qjatnl" path="res://sprites/burst_animation.tres" id="4_m6ukc"]
 [ext_resource type="AudioStream" uid="uid://cydjn1ct3hps2" path="res://sounds/walking.ogg" id="5_ics1s"]
 
@@ -12,7 +12,7 @@
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("1_ujs4a")
-weapons = Array[Resource("res://scripts/weapon.gd")]([ExtResource("2_6epbw")])
+weapons = Array[Resource("res://scripts/weapon.gd")]([ExtResource("2_87pg6")])
 
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.05, 2.08165e-12)
@@ -60,7 +60,7 @@ frame = 2
 
 [node name="RayCast" type="RayCast3D" parent="Head/Camera"]
 exclude_parent = false
-target_position = Vector3(2.08165e-12, 2.08165e-12, -25)
+target_position = Vector3(2.08165e-12, 2.08165e-12, -50)
 collide_with_areas = true
 
 [node name="SoundFootsteps" type="AudioStreamPlayer" parent="."]
