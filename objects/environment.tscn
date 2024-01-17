@@ -18,14 +18,16 @@ sky_material = SubResource("ShaderMaterial_4t8qy")
 [sub_resource type="Environment" id="Environment_c0whc"]
 background_mode = 2
 sky = SubResource("Sky_vm6fm")
-ambient_light_source = 3
+ambient_light_source = 2
+ambient_light_color = Color(0.662745, 0.694118, 0.772549, 1)
+ambient_light_energy = 1.15
 reflected_light_source = 2
 glow_enabled = true
 
 [node name="Environment" type="Node"]
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 4.37114e-08, -4.37114e-08, 1.91069e-15, 1, 0, -1, 1.91069e-15, 0, 0, 0)
+transform = Transform3D(0.146447, 0.853553, -0.5, -0.5, 0.5, 0.707107, 0.853553, 0.146447, 0.5, 0, 0, 0)
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
