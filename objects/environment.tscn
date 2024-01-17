@@ -4,10 +4,10 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4t8qy"]
 shader = ExtResource("1_y2gpm")
-shader_parameter/day_top_colour = Color(0.101961, 0.6, 1, 1)
-shader_parameter/day_bottom_colour = Color(0.4, 0.8, 1, 1)
-shader_parameter/horizon_colour = Color(0, 0.701961, 0.8, 1)
-shader_parameter/horizon_blur = 0.05
+shader_parameter/day_top_colour = Color(0.1, 0.6, 1, 1)
+shader_parameter/day_bottom_colour = Color(0.576471, 0.780392, 0.898039, 1)
+shader_parameter/horizon_colour = Color(0, 0.7, 0.8, 1)
+shader_parameter/horizon_blur = 0.1
 shader_parameter/sun_colour = Color(10, 8, 1, 1)
 shader_parameter/sun_size = 0.2
 shader_parameter/sun_blur = 10.0
@@ -23,11 +23,14 @@ ambient_light_color = Color(0.662745, 0.694118, 0.772549, 1)
 ambient_light_energy = 1.15
 reflected_light_source = 2
 glow_enabled = true
+volumetric_fog_density = 0.104
+volumetric_fog_emission_energy = 0.0
+volumetric_fog_gi_inject = 0.56
 
 [node name="Environment" type="Node"]
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.146447, 0.853553, -0.5, -0.5, 0.5, 0.707107, 0.853553, 0.146447, 0.5, 0, 0, 0)
+transform = Transform3D(0.5, 0.75, -0.433013, 1.74393e-16, 0.5, 0.866026, 0.866025, -0.433013, 0.25, 0, 0, 0)
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]

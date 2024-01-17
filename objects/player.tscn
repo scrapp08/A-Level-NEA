@@ -1,9 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://dl2ed4gkybggf"]
+[gd_scene load_steps=11 format=3 uid="uid://dl2ed4gkybggf"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ujs4a"]
 [ext_resource type="Resource" uid="uid://dj8h5ciqbruho" path="res://weapons/sniper_rifle.tres" id="2_87pg6"]
+[ext_resource type="Resource" uid="uid://biv6j0so3oqc2" path="res://weapons/rifle.tres" id="2_w3hg2"]
+[ext_resource type="Resource" uid="uid://dyvt505ga4d2g" path="res://weapons/pistol.tres" id="2_y2wii"]
+[ext_resource type="Resource" uid="uid://chyox2hmrkbf1" path="res://weapons/shotgun.tres" id="4_0p32a"]
 [ext_resource type="SpriteFrames" uid="uid://dbv3sy5qjatnl" path="res://sprites/burst_animation.tres" id="4_m6ukc"]
 [ext_resource type="AudioStream" uid="uid://cydjn1ct3hps2" path="res://sounds/walking.ogg" id="5_ics1s"]
+[ext_resource type="Resource" uid="uid://dp8jscgglh80f" path="res://weapons/rocket_launcher.tres" id="6_7ecq4"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_x830i"]
 
@@ -12,7 +16,7 @@
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("1_ujs4a")
-weapons = Array[Resource("res://scripts/weapon.gd")]([ExtResource("2_87pg6")])
+weapons = Array[Resource("res://scripts/weapon.gd")]([ExtResource("2_w3hg2"), ExtResource("2_y2wii"), ExtResource("6_7ecq4"), ExtResource("4_0p32a"), ExtResource("2_87pg6")])
 
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.05, 2.08165e-12)

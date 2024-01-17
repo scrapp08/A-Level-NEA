@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://c5pbnl85mtnbk"]
+
+[ext_resource type="Script" path="res://scripts/rocket.gd" id="1_1iw71"]
+[ext_resource type="PackedScene" uid="uid://b06pjhioqukar" path="res://models/rocket.glb" id="1_378j1"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_voh1s"]
+radius = 0.25
+height = 1.5
+
+[node name="Rocket" type="RigidBody3D"]
+gravity_scale = 1.66533e-16
+script = ExtResource("1_1iw71")
+
+[node name="rocket" parent="." instance=ExtResource("1_378j1")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, -1.5246e-23, -1.5246e-23, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_voh1s")

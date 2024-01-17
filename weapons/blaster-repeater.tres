@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" path="res://scripts/weapon.gd" id="1_l1atd"]
 [ext_resource type="Texture2D" uid="uid://2jld33y6h5pq" path="res://sprites/crosshair.png" id="1_qu13h"]
-[ext_resource type="PackedScene" uid="uid://bjytkscue3tty" path="res://models/weapons/sniper_rifle.glb" id="2_am2xp"]
+[ext_resource type="PackedScene" uid="uid://ddbvj1go0k7mc" path="res://models/weapons/blaster-repeater.glb" id="2_45ka7"]
 
 [resource]
 script = ExtResource("1_l1atd")
-model = ExtResource("2_am2xp")
+model = ExtResource("2_45ka7")
 position = Vector3(0, 0, 0)
 rotation = Vector3(0, 180, 0)
 muzzle_position = Vector3(0.1, -0.4, 1.5)

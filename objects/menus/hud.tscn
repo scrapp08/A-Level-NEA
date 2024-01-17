@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://bt8tp4mf2mkmx"]
 
 [ext_resource type="Theme" uid="uid://c6gw6kxkem77m" path="res://themes/ui_theme.tres" id="1_ybg0d"]
-[ext_resource type="FontFile" uid="uid://cfdg5v55wvqlu" path="res://fonts/TF2Build.ttf" id="2_qwm6v"]
-[ext_resource type="FontFile" uid="uid://cdp64ei61n1i8" path="res://fonts/TF2Secondary.ttf" id="3_p8f5f"]
+[ext_resource type="FontFile" uid="uid://cdfsndcqwi6ov" path="res://fonts/TF2Build.ttf" id="2_qwm6v"]
+[ext_resource type="FontFile" uid="uid://bmu1jap8nrme8" path="res://fonts/TF2Secondary.ttf" id="3_p8f5f"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jnbll"]
 bg_color = Color(0.227451, 0.333333, 0.396078, 1)
@@ -50,8 +50,14 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.35, 0.35)
+pivot_offset = Vector2(64, 64)
 
 [node name="Health" type="Label" parent="."]
 layout_mode = 1
@@ -114,6 +120,7 @@ alignment = 1
 [node name="BlueScore" type="Panel" parent="Scoreboard"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_jnbll")
 
 [node name="Label" type="Label" parent="Scoreboard/BlueScore"]
@@ -135,6 +142,7 @@ vertical_alignment = 2
 [node name="RedScore" type="Panel" parent="Scoreboard"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_lxo15")
 
 [node name="Label" type="Label" parent="Scoreboard/RedScore"]
@@ -164,6 +172,7 @@ offset_top = 2.0
 offset_right = -12.1201
 offset_bottom = 1.52
 size_flags_horizontal = 3
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_poefg")
 metadata/_edit_lock_ = true
 
