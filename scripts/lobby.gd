@@ -4,13 +4,12 @@ signal pause_status(value: bool)
 signal weapon_select(value: int)
 
 const PLAYER := preload("res://objects/player.tscn")
+const DEFAULT_SERVER_IP = "127.0.0.1" # IPv4 localhost
 const PORT := 9999
 
 @export var debug_local_multiplayer: bool
 
 var paused: bool
-
-var _enet_peer = ENetMultiplayerPeer.new()
 
 @onready var main_menu: PanelContainer = $CanvasLayer/MainMenu
 @onready var address_entry: LineEdit = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/VBoxContainer/AddressEntry
@@ -27,6 +26,11 @@ var _enet_peer = ENetMultiplayerPeer.new()
 @onready var ip: Label = $CanvasLayer/HUD/IP
 
 
+func _ready() -> void:
+	multiplayer.peer_connected.connect(_add_player)
+	multiplayer.peer_disconnected.connect(_remove_player)
+
+
 func _unhandled_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("menu") and not paused:
 		pause(true)
@@ -35,27 +39,39 @@ func _unhandled_input(_event: InputEvent) -> void:
 		pause(false)
 
 
-func _on_host_pressed() -> void:
+func _on_host_pressed():
 	main_menu.hide()
 	hud.show()
-	_enet_peer.create_server(PORT)
-	multiplayer.multiplayer_peer = _enet_peer
-	multiplayer.peer_connected.connect(_add_player)
-	multiplayer.peer_disconnected.connect(_remove_player)
+	var peer = ENetMultiplayerPeer.new()
+	var error = peer.create_server(PORT)
+	if error:
+		return error
+	multiplayer.multiplayer_peer = peer
+
 	_add_player(multiplayer.get_unique_id())
 
 	if not debug_local_multiplayer:
 		_upnp_setup()
 	else:
-		ip.text = "IP: localhost"
+		ip.text = "IP: " + str(DEFAULT_SERVER_IP)
 		ip.show()
 
 
-func _on_join_pressed() -> void:
+func _on_join_pressed():
 	main_menu.hide()
 	hud.show()
-	_enet_peer.create_client(address_entry.text, PORT)
-	multiplayer.multiplayer_peer = _enet_peer
+	var peer = ENetMultiplayerPeer.new()
+	if not debug_local_multiplayer:
+		var error = peer.create_client(address_entry.text, PORT)
+		if error:
+			return error
+	else:
+		var error = peer.create_client(DEFAULT_SERVER_IP, PORT)
+		if error:
+			return error
+		ip.text = "IP: " + str(DEFAULT_SERVER_IP)
+		ip.show()
+	multiplayer.multiplayer_peer = peer
 
 
 func _add_player(peer_id) -> void:
@@ -64,7 +80,7 @@ func _add_player(peer_id) -> void:
 	add_child(player)
 
 	if player.is_multiplayer_authority():
-		player.health_changed.connect(update_health)
+		player.health_updated.connect(update_health)
 
 
 func _remove_player(peer_id):
@@ -76,7 +92,7 @@ func _remove_player(peer_id):
 
 func _on_multiplayer_spawner_spawned(node: Node) -> void:
 	if node.is_multiplayer_authority():
-		node.health_changed.connect(update_health)
+		node.health_updated.connect(update_health)
 
 
 func _on_resume_pressed() -> void:

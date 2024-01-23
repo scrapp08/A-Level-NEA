@@ -1,10 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://dbbx36it04iex"]
+[gd_scene load_steps=7 format=3 uid="uid://dbbx36it04iex"]
 
 [ext_resource type="Theme" uid="uid://c6gw6kxkem77m" path="res://themes/ui_theme.tres" id="1_vdknf"]
-[ext_resource type="FontFile" uid="uid://cfdg5v55wvqlu" path="res://fonts/TF2Build.ttf" id="2_s7u36"]
+[ext_resource type="FontFile" uid="uid://cdfsndcqwi6ov" path="res://fonts/TF2Build.ttf" id="2_s7u36"]
 [ext_resource type="Texture2D" uid="uid://b16a2qd8d51y4" path="res://addons/kenney_weapon-pack/Sprites/Render/machinegun.png" id="3_2wpac"]
 [ext_resource type="Texture2D" uid="uid://c40emby3ouej1" path="res://addons/kenney_weapon-pack/Sprites/Render/pistol.png" id="4_g6i1x"]
-[ext_resource type="Texture2D" uid="uid://dndp3bc4l500l" path="res://addons/kenney_weapon-pack/Sprites/Render/rocketlauncher.png" id="5_3tirq"]
 [ext_resource type="Texture2D" uid="uid://c067gi7cft1lw" path="res://addons/kenney_weapon-pack/Sprites/Render/shotgun.png" id="6_hjek5"]
 [ext_resource type="Texture2D" uid="uid://mfy2tq8jt8at" path="res://addons/kenney_weapon-pack/Sprites/Render/sniper.png" id="7_nslp6"]
 
@@ -19,13 +18,15 @@ theme = ExtResource("1_vdknf")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 660.0
-offset_top = 270.0
-offset_right = -660.0
-offset_bottom = -390.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -270.0
+offset_top = -182.0
+offset_right = 270.0
+offset_bottom = 182.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 15
@@ -57,18 +58,16 @@ theme_override_fonts/font = ExtResource("2_s7u36")
 theme_override_font_sizes/font_size = 30
 allow_search = false
 auto_height = true
-item_count = 5
+item_count = 4
 icon_scale = 0.5
 item_0/text = "Rifle"
 item_0/icon = ExtResource("3_2wpac")
 item_1/text = "Pistol"
 item_1/icon = ExtResource("4_g6i1x")
-item_2/text = "Rocket Launcher"
-item_2/icon = ExtResource("5_3tirq")
-item_3/text = "Shotgun"
-item_3/icon = ExtResource("6_hjek5")
-item_4/text = "Sniper Rifle"
-item_4/icon = ExtResource("7_nslp6")
+item_2/text = "Shotgun"
+item_2/icon = ExtResource("6_hjek5")
+item_3/text = "Sniper Rifle"
+item_3/icon = ExtResource("7_nslp6")
 
 [node name="Back" type="Button" parent="MarginContainer/Loadout/MarginContainer/VBoxContainer"]
 layout_mode = 2

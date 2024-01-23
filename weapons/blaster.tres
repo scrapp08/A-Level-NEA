@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://2jld33y6h5pq" path="res://sprites/crosshair.png" id="1_2onsr"]
 [ext_resource type="PackedScene" uid="uid://bw7bblpndt0ky" path="res://models/weapons/blaster.glb" id="2_73xv6"]
-[ext_resource type="Script" path="res://scripts/weapon.gd" id="2_107w7"]
+[ext_resource type="Script" path="res://scripts/weapons/weapon.gd" id="2_107w7"]
 
 [resource]
 script = ExtResource("2_107w7")

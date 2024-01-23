@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cnareske831tl"]
 
 [ext_resource type="Theme" uid="uid://c6gw6kxkem77m" path="res://themes/ui_theme.tres" id="1_66n1h"]
-[ext_resource type="FontFile" uid="uid://cfdg5v55wvqlu" path="res://fonts/TF2Build.ttf" id="2_xdxc1"]
+[ext_resource type="FontFile" uid="uid://cdfsndcqwi6ov" path="res://fonts/TF2Build.ttf" id="2_xdxc1"]
 
 [node name="MainMenu" type="PanelContainer"]
 anchors_preset = 15

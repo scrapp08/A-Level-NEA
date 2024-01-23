@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-signal health_updated
+signal health_updated(health_value)
 
 @export_subgroup("Properties")
 @export var movement_speed := 6
@@ -8,7 +8,6 @@ signal health_updated
 
 @export_subgroup("Weapons")
 @export var weapons: Array[Weapon] = []
-@export var crosshair:TextureRect
 
 var weapon: Weapon
 var weapon_index := 0
@@ -22,33 +21,48 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var previously_floored := false
 
 var health := 200
+var paused := false
 
+@onready var world = get_parent()
 @onready var camera = $Head/Camera
 @onready var raycast = $Head/Camera/RayCast
 @onready var muzzle = $Head/Camera/SubViewportContainer/SubViewport/CameraItem/Muzzle
 @onready var container = $Head/Camera/SubViewportContainer/SubViewport/CameraItem/Container
 @onready var sound_footsteps = $SoundFootsteps
 @onready var blaster_cooldown = $Cooldown
+@onready var crosshair: TextureRect = world.get_node("CanvasLayer/HUD/Crosshair")
 
 
 func _enter_tree() -> void:
 	set_multiplayer_authority(str(name).to_int())
+	print(str(name).to_int())
 
 
 func _ready() -> void:
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	if not is_multiplayer_authority(): return
 
-	weapon = weapons[weapon_index] # Weapon must never be nil
-	initiate_change_weapon(weapon_index)
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	camera.current = true
+
+	world.pause_status.connect(_on_pause_status)
+	paused = false
+
+	world.weapon_select.connect(_on_weapon_select)
+
+	_on_weapon_select(weapon_index)
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if not is_multiplayer_authority(): return
+
 	if event is InputEventMouseMotion:
 		rotation_target.y -= event.relative.x / mouse_sensitivity
 		rotation_target.x -= event.relative.y / mouse_sensitivity
 
 
 func _physics_process(delta: float) -> void:
+	if not is_multiplayer_authority(): return
+
 	var input := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	movement_velocity = Vector3(input.x, 0, input.y).normalized() * movement_speed
 
@@ -63,7 +77,7 @@ func _physics_process(delta: float) -> void:
 		gravity = 0
 
 	if Input.is_action_pressed("shoot"):
-		action_shoot()
+		_action_shoot()
 
 	# Movement
 	movement_velocity = transform.basis * movement_velocity # Move forward
@@ -93,18 +107,37 @@ func _physics_process(delta: float) -> void:
 	previously_floored = is_on_floor()
 
 
-func _process(_delta: float) -> void:
-	action_weapon_toggle()
+func _on_pause_status(value: bool) -> void:
+	paused = value
+
+	if paused:
+		Input.mouse_mode = Input.MOUSE_MODE_CONFINED
+
+	elif not paused:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
-func action_shoot() -> void:
+func _on_weapon_select(index: int) -> void:
+	weapon = weapons[index]
+	_initiate_change_weapon(index)
+
+	Audio.play("sounds/weapon_change.ogg")
+
+
+@rpc("any_peer")
+func recieve_damage(damage: int) -> void:
+	health -= damage
+	if health <= 0:
+		health = 200
+		position = Vector3.ZERO
+	health_updated.emit(health)
+
+
+func _action_shoot() -> void:
 	if !blaster_cooldown.is_stopped(): return # Cooldown for shooting
+	if paused: return
 
 	Audio.play(weapon.sound_shoot)
-
-	container.position.z += 0.25 # Knockback of weapon visual
-	camera.rotation.x += 0.025 # Knockback of camera
-	movement_velocity += Vector3(0, 0, weapon.knockback) # Knockback
 
 	# Set muzzle flash position, play animation
 	muzzle.play("default")
@@ -141,27 +174,20 @@ func action_shoot() -> void:
 		impact_instance.position = raycast.get_collision_point() + (raycast.get_collision_normal() / 10)
 		impact_instance.look_at(camera.global_transform.origin, Vector3.UP, true)
 
-
-# Toggle between available weapons (listed in 'weapons')
-func action_weapon_toggle():
-	if Input.is_action_just_pressed("weapon_toggle"):
-
-		weapon_index = wrap(weapon_index + 1, 0, weapons.size())
-		initiate_change_weapon(weapon_index)
-
-		Audio.play("sounds/weapon_change.ogg")
+	container.position.z += float(weapon.knockback) / 100.0 # Knockback of weapon visual
+	camera.rotation.x += float(weapon.knockback) / 1000.0 # Knockback of camera
 
 
-func initiate_change_weapon(index) -> void:
+func _initiate_change_weapon(index) -> void:
 	weapon_index = index
 
 	tween = get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT_IN)
 	tween.tween_property(container, "position", container_offset - Vector3(0, 1, 0), 0.1)
-	tween.tween_callback(change_weapon) # Changes the model
+	tween.tween_callback(_change_weapon) # Changes the model
 
 
-func change_weapon() -> void:
+func _change_weapon() -> void:
 	weapon = weapons[weapon_index]
 
 	# Step 1. Remove previous weapon model(s) from container
@@ -183,11 +209,3 @@ func change_weapon() -> void:
 
 	raycast.target_position = Vector3(0, 0, -1) * weapon.max_distance
 	crosshair.texture = weapon.crosshair
-
-
-func damage(amount) -> void:
-	health -= amount
-	health_updated.emit(health) # Update health on HUD
-
-	if health < 0:
-		get_tree().reload_current_scene() # Reset when out of health

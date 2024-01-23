@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://2jld33y6h5pq" path="res://sprites/crosshair.png" id="1_j1i17"]
 [ext_resource type="PackedScene" uid="uid://belutxfjtrerq" path="res://models/weapons/rifle.glb" id="2_bp4ur"]
-[ext_resource type="Script" path="res://scripts/weapon.gd" id="3_beaoi"]
+[ext_resource type="Script" path="res://scripts/weapons/weapon.gd" id="3_beaoi"]
 
 [resource]
 script = ExtResource("3_beaoi")
@@ -11,10 +11,11 @@ position = Vector3(0, 0, 0)
 rotation = Vector3(0, 180, 0)
 muzzle_position = Vector3(-0.1, -0.5, 1.75)
 cooldown = 0.1
+clip_size = 10
 max_distance = 30
 damage = 15.0
 spread = 0.5
 shot_count = 1
-knockback = 10
+knockback = 25
 sound_shoot = "sounds/blaster_repeater.ogg"
 crosshair = ExtResource("1_j1i17")

@@ -7,16 +7,26 @@
 [ext_resource type="Resource" uid="uid://chyox2hmrkbf1" path="res://weapons/shotgun.tres" id="4_0p32a"]
 [ext_resource type="SpriteFrames" uid="uid://dbv3sy5qjatnl" path="res://sprites/burst_animation.tres" id="4_m6ukc"]
 [ext_resource type="AudioStream" uid="uid://cydjn1ct3hps2" path="res://sounds/walking.ogg" id="5_ics1s"]
-[ext_resource type="Resource" uid="uid://dp8jscgglh80f" path="res://weapons/rocket_launcher.tres" id="6_7ecq4"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_x830i"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gdq8c"]
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_mkyjx"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("Head/Camera:rotation")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("1_ujs4a")
-weapons = Array[Resource("res://scripts/weapon.gd")]([ExtResource("2_w3hg2"), ExtResource("2_y2wii"), ExtResource("6_7ecq4"), ExtResource("4_0p32a"), ExtResource("2_87pg6")])
+weapons = Array[Resource("res://scripts/weapons/weapon.gd")]([ExtResource("2_w3hg2"), ExtResource("2_y2wii"), ExtResource("4_0p32a"), ExtResource("2_87pg6")])
 
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.05, 2.08165e-12)
@@ -74,3 +84,6 @@ autoplay = true
 
 [node name="Cooldown" type="Timer" parent="."]
 one_shot = true
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_mkyjx")

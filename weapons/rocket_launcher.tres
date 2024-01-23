@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://ce3lgq7foiusl" path="res://sprites/crosshair-repeater.png" id="1_2tyre"]
 [ext_resource type="PackedScene" uid="uid://bnnngp0ssn02f" path="res://models/weapons/rocket_launcher.glb" id="2_trhui"]
-[ext_resource type="Script" path="res://scripts/weapon.gd" id="3_a1s0y"]
+[ext_resource type="Script" path="res://scripts/weapons/weapon.gd" id="3_a1s0y"]
 
 [resource]
 script = ExtResource("3_a1s0y")
@@ -11,6 +11,7 @@ position = Vector3(0, 0, 0)
 rotation = Vector3(0, 180, 0)
 muzzle_position = Vector3(2.08165e-12, -0.6, 2)
 cooldown = 2.0
+clip_size = 10
 max_distance = 50
 damage = 80.0
 spread = 0.1
