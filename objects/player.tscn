@@ -1,12 +1,13 @@
-[gd_scene load_steps=11 format=3 uid="uid://dl2ed4gkybggf"]
+[gd_scene load_steps=12 format=3 uid="uid://dl2ed4gkybggf"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ujs4a"]
-[ext_resource type="Resource" uid="uid://dj8h5ciqbruho" path="res://weapons/sniper_rifle.tres" id="2_87pg6"]
-[ext_resource type="Resource" uid="uid://biv6j0so3oqc2" path="res://weapons/rifle.tres" id="2_w3hg2"]
-[ext_resource type="Resource" uid="uid://dyvt505ga4d2g" path="res://weapons/pistol.tres" id="2_y2wii"]
-[ext_resource type="Resource" uid="uid://chyox2hmrkbf1" path="res://weapons/shotgun.tres" id="4_0p32a"]
+[ext_resource type="Resource" uid="uid://biv6j0so3oqc2" path="res://weapons/rifle.tres" id="2_jcj2s"]
+[ext_resource type="Resource" uid="uid://dyvt505ga4d2g" path="res://weapons/pistol.tres" id="3_6gu00"]
+[ext_resource type="PackedScene" uid="uid://bt8tp4mf2mkmx" path="res://objects/menus/hud.tscn" id="3_srgwu"]
+[ext_resource type="Resource" uid="uid://chyox2hmrkbf1" path="res://weapons/shotgun.tres" id="4_163lp"]
+[ext_resource type="PackedScene" uid="uid://dbbx36it04iex" path="res://objects/menus/pause_menu.tscn" id="4_506ta"]
 [ext_resource type="SpriteFrames" uid="uid://dbv3sy5qjatnl" path="res://sprites/burst_animation.tres" id="4_m6ukc"]
-[ext_resource type="AudioStream" uid="uid://cydjn1ct3hps2" path="res://sounds/walking.ogg" id="5_ics1s"]
+[ext_resource type="Resource" uid="uid://dj8h5ciqbruho" path="res://weapons/sniper_rifle.tres" id="5_al1is"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_x830i"]
 
@@ -26,7 +27,7 @@ properties/2/replication_mode = 1
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("1_ujs4a")
-weapons = Array[Resource("res://scripts/weapons/weapon.gd")]([ExtResource("2_w3hg2"), ExtResource("2_y2wii"), ExtResource("4_0p32a"), ExtResource("2_87pg6")])
+weapons = Array[Resource("res://scripts/weapons/weapon.gd")]([ExtResource("2_jcj2s"), ExtResource("3_6gu00"), ExtResource("4_163lp"), ExtResource("5_al1is")])
 
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.05, 2.08165e-12)
@@ -41,7 +42,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2, 2.08165e-12)
 
 [node name="Camera" type="Camera3D" parent="Head"]
 cull_mask = 1048573
-current = true
 fov = 80.0
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="Head/Camera"]
@@ -51,6 +51,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 stretch = true
+metadata/_edit_use_anchors_ = true
 
 [node name="SubViewport" type="SubViewport" parent="Head/Camera/SubViewportContainer"]
 transparent_bg = true
@@ -77,8 +78,14 @@ exclude_parent = false
 target_position = Vector3(2.08165e-12, 2.08165e-12, -50)
 collide_with_areas = true
 
+[node name="HUD" parent="." instance=ExtResource("3_srgwu")]
+mouse_filter = 2
+
+[node name="PauseMenu" parent="." instance=ExtResource("4_506ta")]
+visible = false
+mouse_filter = 1
+
 [node name="SoundFootsteps" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("5_ics1s")
 volume_db = -5.0
 autoplay = true
 
@@ -87,3 +94,6 @@ one_shot = true
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_mkyjx")
+
+[editable path="HUD"]
+[editable path="PauseMenu"]

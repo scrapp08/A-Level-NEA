@@ -1,10 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://blwx07j4okvds"]
+[gd_scene load_steps=5 format=3 uid="uid://blwx07j4okvds"]
 
 [ext_resource type="PackedScene" uid="uid://cqdhu80i4y0v0" path="res://objects/environment.tscn" id="1_4q7xw"]
 [ext_resource type="Script" path="res://scripts/lobby.gd" id="1_5he6f"]
 [ext_resource type="PackedScene" uid="uid://vm24d5eiwq0f" path="res://models/lobby.glb" id="2_3ljrd"]
-[ext_resource type="PackedScene" uid="uid://dbbx36it04iex" path="res://objects/menus/pause_menu.tscn" id="4_bqdpj"]
-[ext_resource type="PackedScene" uid="uid://bt8tp4mf2mkmx" path="res://objects/menus/hud.tscn" id="4_socjs"]
 [ext_resource type="PackedScene" uid="uid://cnareske831tl" path="res://objects/menus/main_menu.tscn" id="5_1jlm4"]
 
 [node name="Lobby" type="Node"]
@@ -14,13 +12,6 @@ debug_local_multiplayer = true
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="MainMenu" parent="CanvasLayer" instance=ExtResource("5_1jlm4")]
-
-[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("4_bqdpj")]
-visible = false
-
-[node name="HUD" parent="CanvasLayer" instance=ExtResource("4_socjs")]
-visible = false
-mouse_filter = 2
 
 [node name="Environment" parent="." instance=ExtResource("1_4q7xw")]
 
@@ -32,13 +23,5 @@ spawn_path = NodePath("..")
 
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/VBoxContainer/Host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/VBoxContainer/Join" to="." method="_on_join_pressed"]
-[connection signal="item_selected" from="CanvasLayer/PauseMenu/MarginContainer/Loadout/MarginContainer/VBoxContainer/ItemList" to="." method="_on_item_list_item_selected"]
-[connection signal="pressed" from="CanvasLayer/PauseMenu/MarginContainer/Loadout/MarginContainer/VBoxContainer/Back" to="." method="_on_back_pressed"]
-[connection signal="pressed" from="CanvasLayer/PauseMenu/MarginContainer/Options/Resume" to="." method="_on_resume_pressed"]
-[connection signal="pressed" from="CanvasLayer/PauseMenu/MarginContainer/Options/Loadout" to="." method="_on_loadout_pressed"]
-[connection signal="pressed" from="CanvasLayer/PauseMenu/MarginContainer/Options/Quit" to="." method="_on_quit_pressed"]
-[connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]
 
 [editable path="CanvasLayer/MainMenu"]
-[editable path="CanvasLayer/PauseMenu"]
-[editable path="CanvasLayer/HUD"]
