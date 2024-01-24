@@ -8,7 +8,7 @@
 script = ExtResource("3_x343y")
 model = ExtResource("2_2rwf6")
 position = Vector3(0, 0, 0)
-rotation = Vector3(0, 180, 0)
+rotation = Vector3(0, 0, 0)
 muzzle_position = Vector3(-0.05, -0.5, 1.5)
 cooldown = 0.6
 clip_size = 10

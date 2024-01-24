@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dl2ed4gkybggf"]
+[gd_scene load_steps=13 format=3 uid="uid://dl2ed4gkybggf"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ujs4a"]
 [ext_resource type="Resource" uid="uid://biv6j0so3oqc2" path="res://weapons/rifle.tres" id="2_jcj2s"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dbbx36it04iex" path="res://objects/menus/pause_menu.tscn" id="4_506ta"]
 [ext_resource type="SpriteFrames" uid="uid://dbv3sy5qjatnl" path="res://sprites/burst_animation.tres" id="4_m6ukc"]
 [ext_resource type="Resource" uid="uid://dj8h5ciqbruho" path="res://weapons/sniper_rifle.tres" id="5_al1is"]
+[ext_resource type="PackedScene" uid="uid://belutxfjtrerq" path="res://models/weapons/rifle.glb" id="6_85xbu"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_x830i"]
 
@@ -44,31 +45,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2, 2.08165e-12)
 cull_mask = 1048573
 fov = 80.0
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="Head/Camera"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-stretch = true
-metadata/_edit_use_anchors_ = true
+[node name="Container" type="Node3D" parent="Head/Camera"]
+transform = Transform3D(-1, 3.48787e-16, -8.74228e-08, 3.48787e-16, 1, -3.48787e-16, 8.74228e-08, -3.48787e-16, -1, 1.2, -1.5, -2.25)
 
-[node name="SubViewport" type="SubViewport" parent="Head/Camera/SubViewportContainer"]
-transparent_bg = true
-handle_input_locally = false
-msaa_3d = 1
-size = Vector2i(1920, 1080)
-render_target_update_mode = 4
+[node name="rifle" parent="Head/Camera/Container" instance=ExtResource("6_85xbu")]
 
-[node name="CameraItem" type="Camera3D" parent="Head/Camera/SubViewportContainer/SubViewport"]
-cull_mask = 1047554
-fov = 40.0
-
-[node name="Container" type="Node3D" parent="Head/Camera/SubViewportContainer/SubViewport/CameraItem"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, -1, -2.25)
-
-[node name="Muzzle" type="AnimatedSprite3D" parent="Head/Camera/SubViewportContainer/SubViewport/CameraItem"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -0.75, -6)
+[node name="Muzzle" type="AnimatedSprite3D" parent="Head/Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -3.25, -6)
 layers = 2
 sprite_frames = ExtResource("4_m6ukc")
 frame = 2
@@ -94,6 +77,12 @@ one_shot = true
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_mkyjx")
+
+[connection signal="item_selected" from="PauseMenu/MarginContainer/Loadout/MarginContainer/VBoxContainer/ItemList" to="." method="_on_item_list_item_selected"]
+[connection signal="pressed" from="PauseMenu/MarginContainer/Loadout/MarginContainer/VBoxContainer/Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="PauseMenu/MarginContainer/Options/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="PauseMenu/MarginContainer/Options/Loadout" to="." method="_on_loadout_pressed"]
+[connection signal="pressed" from="PauseMenu/MarginContainer/Options/Quit" to="." method="_on_quit_pressed"]
 
 [editable path="HUD"]
 [editable path="PauseMenu"]

@@ -1,7 +1,6 @@
 extends Node
 
-signal pause_status(value: bool)
-signal weapon_select(value: int)
+signal address(address: String)
 
 const PLAYER := preload("res://objects/player.tscn")
 const DEFAULT_SERVER_IP := "127.0.0.1" # IPv4 localhost
@@ -17,6 +16,7 @@ var enet_peer = ENetMultiplayerPeer.new()
 
 func _on_host_pressed():
 	main_menu.hide()
+
 	enet_peer.create_server(PORT)
 	multiplayer.multiplayer_peer = enet_peer
 	multiplayer.peer_connected.connect(_add_player)
@@ -26,12 +26,22 @@ func _on_host_pressed():
 
 	if not debug_local_multiplayer:
 		_upnp_setup()
+	else:
+		address.emit("IP: " + DEFAULT_SERVER_IP)
+		print("Set address")
 
 
 func _on_join_pressed():
 	main_menu.hide()
-	enet_peer.create_client(DEFAULT_SERVER_IP, PORT)
-	multiplayer.multiplayer_peer = enet_peer
+
+	if address_entry.get_text() != "":
+		enet_peer.create_client(address_entry.text, PORT)
+		multiplayer.multiplayer_peer = enet_peer
+	else:
+		enet_peer.create_client(DEFAULT_SERVER_IP, PORT)
+		multiplayer.multiplayer_peer = enet_peer
+		address.emit("IP: " + DEFAULT_SERVER_IP)
+		print("Set address")
 
 
 func _add_player(peer_id) -> void:
@@ -61,3 +71,5 @@ func _upnp_setup():
 		"UPNP Port Mapping Failed! Error %s" % map_result)
 
 	print("Success! Join Address: %s" % upnp.query_external_address())
+
+	address.emit("IP: " + str(upnp.query_external_address()))

@@ -8,7 +8,7 @@
 script = ExtResource("3_beaoi")
 model = ExtResource("2_bp4ur")
 position = Vector3(0, 0, 0)
-rotation = Vector3(0, 180, 0)
+rotation = Vector3(0, 0, 0)
 muzzle_position = Vector3(-0.1, -0.5, 1.75)
 cooldown = 0.1
 clip_size = 10

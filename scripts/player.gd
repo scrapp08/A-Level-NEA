@@ -10,7 +10,7 @@ extends CharacterBody3D
 var weapon: Weapon
 var weapon_index := 0
 var container_offset = Vector3(1.2, -1.1, -2.75)
-var tween:Tween
+var tween: Tween
 
 var mouse_sensitivity = 700
 var movement_velocity: Vector3
@@ -18,17 +18,26 @@ var rotation_target: Vector3
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var previously_floored := false
 
-var health := 200
+var health_value := 200
 var paused := false
 
 @onready var camera = $Head/Camera
-@onready var container: Node3D = $Head/Camera/SubViewportContainer/SubViewport/CameraItem/Container
-@onready var muzzle: AnimatedSprite3D = $Head/Camera/SubViewportContainer/SubViewport/CameraItem/Muzzle
+@onready var container: Node3D = $Head/Camera/Container
+@onready var muzzle: AnimatedSprite3D = $Head/Camera/Muzzle
 @onready var ray_cast: RayCast3D = $Head/Camera/RayCast
+
+@onready var world = get_parent()
+@onready var crosshair: TextureRect = $HUD/Crosshair
+@onready var health: Label = $HUD/Health
+@onready var ammo: Label = $HUD/Ammo
+@onready var ip: Label = $HUD/IP
+
+@onready var pause_menu: Control = $PauseMenu
+@onready var loadout: PanelContainer = $PauseMenu/MarginContainer/Loadout
+@onready var options: VBoxContainer = $PauseMenu/MarginContainer/Options
+
 @onready var sound_footsteps: AudioStreamPlayer = $SoundFootsteps
 @onready var cooldown: Timer = $Cooldown
-@onready var crosshair: TextureRect = $HUD/Crosshair
-
 
 func _enter_tree() -> void:
 	set_multiplayer_authority(str(name).to_int())
@@ -40,15 +49,25 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = true
 
-	_on_weapon_select(weapon_index)
+	health.text = str(health_value)
+
+	world.address.connect(_on_address)
+
+	_on_item_list_item_selected(weapon_index)
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_multiplayer_authority(): return
 
-	if event is InputEventMouseMotion:
+	if event is InputEventMouseMotion and not paused:
 		rotation_target.y -= event.relative.x / mouse_sensitivity
 		rotation_target.x -= event.relative.y / mouse_sensitivity
+
+	if Input.is_action_just_pressed("menu"):
+		if not paused:
+			_pause(true)
+		elif paused:
+			_pause(false)
 
 
 func _physics_process(delta: float) -> void:
@@ -98,11 +117,71 @@ func _physics_process(delta: float) -> void:
 	previously_floored = is_on_floor()
 
 
-func _on_weapon_select(index: int) -> void:
+func _on_address(address: String) -> void:
+	ip.text = address
+
+
+func _on_resume_pressed() -> void:
+	_pause(false)
+
+
+func _on_loadout_pressed() -> void:
+	options.hide()
+	loadout.show()
+
+
+func _on_quit_pressed() -> void:
+	get_tree().quit()
+
+
+func _on_item_list_item_selected(index: int) -> void:
 	weapon = weapons[index]
 	_initiate_change_weapon(index)
 
 	Audio.play("sounds/weapon_change.ogg")
+
+
+func _on_back_pressed() -> void:
+	loadout.hide()
+	options.show()
+
+
+@rpc("any_peer")
+func recieve_damage(amount: int) -> void:
+	health_value -= amount
+
+	health.text = str(health_value)
+
+	if health_value <= 0:
+		health_value = 200
+		health.text = str(health_value)
+		position = Vector3.ZERO
+
+
+@rpc("call_local")
+func render_impact() -> void:
+	var impact = preload("res://objects/impact.tscn")
+	var impact_instance = impact.instantiate()
+
+	impact_instance.play("shot")
+
+	get_tree().root.add_child(impact_instance)
+
+	impact_instance.position = ray_cast.get_collision_point() + (ray_cast.get_collision_normal() / 10)
+	impact_instance.look_at(camera.global_transform.origin, Vector3.UP, true)
+
+
+func _pause(status: bool) -> void:
+	if status:
+		Input.mouse_mode = Input.MOUSE_MODE_CONFINED
+		crosshair.hide()
+		pause_menu.show()
+		paused = true
+	else:
+		pause_menu.hide()
+		crosshair.show()
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		paused = false
 
 
 func _initiate_change_weapon(index) -> void:
@@ -164,20 +243,13 @@ func _action_shoot() -> void:
 
 		var collider = ray_cast.get_collider()
 
-		# Hitting an enemy
-		if collider.has_method("damage"):
-			collider.damage(weapon.damage)
+		# Damage
+		if collider.has_method("recieve_damage"):
+			collider.recieve_damage.rpc_id(collider.get_multiplayer_authority(), weapon.damage)
 
 		# Creating an impact animation
-		var impact = preload("res://objects/impact.tscn")
-		var impact_instance = impact.instantiate()
-
-		impact_instance.play("shot")
-
-		get_tree().root.add_child(impact_instance)
-
-		impact_instance.position = ray_cast.get_collision_point() + (ray_cast.get_collision_normal() / 10)
-		impact_instance.look_at(camera.global_transform.origin, Vector3.UP, true)
+		render_impact.rpc()
 
 	container.position.z += float(weapon.knockback) / 100.0 # Knockback of weapon visual
 	camera.rotation.x += float(weapon.knockback) / 1000.0 # Knockback of camera
+
