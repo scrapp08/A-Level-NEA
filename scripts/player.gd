@@ -9,7 +9,7 @@ extends CharacterBody3D
 
 var weapon: Weapon
 var weapon_index := 0
-var container_offset = Vector3(1.2, -1.1, -2.75)
+var container_offset = Vector3(0.8, -1.0, -1.0)
 var tween: Tween
 
 var mouse_sensitivity = 700
@@ -38,6 +38,7 @@ var paused := false
 
 @onready var sound_footsteps: AudioStreamPlayer = $SoundFootsteps
 @onready var cooldown: Timer = $Cooldown
+
 
 func _enter_tree() -> void:
 	set_multiplayer_authority(str(name).to_int())
@@ -136,7 +137,7 @@ func _on_quit_pressed() -> void:
 
 func _on_item_list_item_selected(index: int) -> void:
 	weapon = weapons[index]
-	_initiate_change_weapon(index)
+	initiate_change_weapon.rpc(index)
 
 	Audio.play("sounds/weapon_change.ogg")
 
@@ -168,32 +169,28 @@ func render_impact() -> void:
 	get_tree().root.add_child(impact_instance)
 
 	impact_instance.position = ray_cast.get_collision_point() + (ray_cast.get_collision_normal() / 10)
-	impact_instance.look_at(camera.global_transform.origin, Vector3.UP, true)
 
 
-func _pause(status: bool) -> void:
-	if status:
-		Input.mouse_mode = Input.MOUSE_MODE_CONFINED
-		crosshair.hide()
-		pause_menu.show()
-		paused = true
-	else:
-		pause_menu.hide()
-		crosshair.show()
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-		paused = false
+@rpc("call_local")
+func muzzle_animation(weapon_muzzle: Vector3) -> void:
+	muzzle.play("default")
+
+	muzzle.rotation_degrees.z = randf_range(-45, 45)
+	muzzle.scale = Vector3.ONE * randf_range(0.40, 0.75)
+	muzzle.position = container.position - weapon_muzzle
 
 
-func _initiate_change_weapon(index) -> void:
+@rpc("call_local")
+func initiate_change_weapon(index) -> void:
 	weapon_index = index
 
 	tween = get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT_IN)
 	tween.tween_property(container, "position", container_offset - Vector3(0, 1, 0), 0.1)
-	tween.tween_callback(_change_weapon) # Changes the model
+	tween.tween_callback(change_weapon) # Changes the model
 
 
-func _change_weapon() -> void:
+func change_weapon() -> void:
 	weapon = weapons[weapon_index]
 
 	# Step 1. Remove previous weapon model(s) from container
@@ -212,9 +209,21 @@ func _change_weapon() -> void:
 		child.layers = 2
 
 	# Set weapon data
-
 	ray_cast.target_position = Vector3(0, 0, -1) * weapon.max_distance
 	crosshair.texture = weapon.crosshair
+
+
+func _pause(status: bool) -> void:
+	if status:
+		Input.mouse_mode = Input.MOUSE_MODE_CONFINED
+		crosshair.hide()
+		pause_menu.show()
+		paused = true
+	else:
+		pause_menu.hide()
+		crosshair.show()
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		paused = false
 
 
 func _action_shoot() -> void:
@@ -224,11 +233,7 @@ func _action_shoot() -> void:
 	Audio.play(weapon.sound_shoot)
 
 	# Set muzzle flash position, play animation
-	muzzle.play("default")
-
-	muzzle.rotation_degrees.z = randf_range(-45, 45)
-	muzzle.scale = Vector3.ONE * randf_range(0.40, 0.75)
-	muzzle.position = container.position - weapon.muzzle_position
+	muzzle_animation.rpc(weapon.muzzle_position)
 
 	cooldown.start(weapon.cooldown)
 

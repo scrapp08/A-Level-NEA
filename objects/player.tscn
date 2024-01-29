@@ -1,14 +1,13 @@
-[gd_scene load_steps=13 format=3 uid="uid://dl2ed4gkybggf"]
+[gd_scene load_steps=12 format=3 uid="uid://dl2ed4gkybggf"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ujs4a"]
-[ext_resource type="Resource" uid="uid://biv6j0so3oqc2" path="res://weapons/rifle.tres" id="2_jcj2s"]
-[ext_resource type="Resource" uid="uid://dyvt505ga4d2g" path="res://weapons/pistol.tres" id="3_6gu00"]
+[ext_resource type="Resource" uid="uid://biv6j0so3oqc2" path="res://objects/weapons/rifle.tres" id="2_atfqh"]
+[ext_resource type="Resource" uid="uid://dyvt505ga4d2g" path="res://objects/weapons/pistol.tres" id="3_b3qh1"]
 [ext_resource type="PackedScene" uid="uid://bt8tp4mf2mkmx" path="res://objects/menus/hud.tscn" id="3_srgwu"]
-[ext_resource type="Resource" uid="uid://chyox2hmrkbf1" path="res://weapons/shotgun.tres" id="4_163lp"]
 [ext_resource type="PackedScene" uid="uid://dbbx36it04iex" path="res://objects/menus/pause_menu.tscn" id="4_506ta"]
+[ext_resource type="Resource" uid="uid://chyox2hmrkbf1" path="res://objects/weapons/shotgun.tres" id="4_hycr2"]
 [ext_resource type="SpriteFrames" uid="uid://dbv3sy5qjatnl" path="res://sprites/burst_animation.tres" id="4_m6ukc"]
-[ext_resource type="Resource" uid="uid://dj8h5ciqbruho" path="res://weapons/sniper_rifle.tres" id="5_al1is"]
-[ext_resource type="PackedScene" uid="uid://belutxfjtrerq" path="res://models/weapons/rifle.glb" id="6_85xbu"]
+[ext_resource type="Resource" uid="uid://dj8h5ciqbruho" path="res://objects/weapons/sniper_rifle.tres" id="5_c2e16"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_x830i"]
 
@@ -28,7 +27,7 @@ properties/2/replication_mode = 1
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("1_ujs4a")
-weapons = Array[Resource("res://scripts/weapons/weapon.gd")]([ExtResource("2_jcj2s"), ExtResource("3_6gu00"), ExtResource("4_163lp"), ExtResource("5_al1is")])
+weapons = Array[Resource("res://scripts/weapons/weapon.gd")]([ExtResource("2_atfqh"), ExtResource("3_b3qh1"), ExtResource("4_hycr2"), ExtResource("5_c2e16")])
 
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1.05, 2.08165e-12)
@@ -42,17 +41,15 @@ shape = SubResource("CapsuleShape3D_gdq8c")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2, 2.08165e-12)
 
 [node name="Camera" type="Camera3D" parent="Head"]
-cull_mask = 1048573
 fov = 80.0
 
 [node name="Container" type="Node3D" parent="Head/Camera"]
-transform = Transform3D(-1, 3.48787e-16, -8.74228e-08, 3.48787e-16, 1, -3.48787e-16, 8.74228e-08, -3.48787e-16, -1, 1.2, -1.5, -2.25)
-
-[node name="rifle" parent="Head/Camera/Container" instance=ExtResource("6_85xbu")]
+transform = Transform3D(-1, 3.48787e-16, -8.74228e-08, 3.48787e-16, 1, -3.48787e-16, 8.74228e-08, -3.48787e-16, -1, 0.6, -1, -0.7)
 
 [node name="Muzzle" type="AnimatedSprite3D" parent="Head/Camera"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -3.25, -6)
 layers = 2
+billboard = 1
 sprite_frames = ExtResource("4_m6ukc")
 frame = 2
 

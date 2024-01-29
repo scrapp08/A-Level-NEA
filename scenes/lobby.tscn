@@ -1,9 +1,24 @@
-[gd_scene load_steps=5 format=3 uid="uid://blwx07j4okvds"]
+[gd_scene load_steps=8 format=3 uid="uid://blwx07j4okvds"]
 
 [ext_resource type="PackedScene" uid="uid://cqdhu80i4y0v0" path="res://objects/environment.tscn" id="1_4q7xw"]
 [ext_resource type="Script" path="res://scripts/lobby.gd" id="1_5he6f"]
 [ext_resource type="PackedScene" uid="uid://vm24d5eiwq0f" path="res://models/lobby.glb" id="2_3ljrd"]
 [ext_resource type="PackedScene" uid="uid://cnareske831tl" path="res://objects/menus/main_menu.tscn" id="5_1jlm4"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_dsfjm"]
+viewport_path = NodePath("Mirror/SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u6wpf"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_dsfjm")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_a52y4"]
+material = SubResource("StandardMaterial3D_u6wpf")
+flip_faces = true
+size = Vector2(7.5, 4)
+subdivide_width = 4
+subdivide_depth = 4
+orientation = 0
 
 [node name="Lobby" type="Node"]
 script = ExtResource("1_5he6f")
@@ -16,6 +31,22 @@ debug_local_multiplayer = true
 [node name="Environment" parent="." instance=ExtResource("1_4q7xw")]
 
 [node name="Map" parent="." instance=ExtResource("2_3ljrd")]
+
+[node name="Mirror" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.9, 4, 2.08165e-12)
+metadata/_edit_group_ = true
+
+[node name="SubViewport" type="SubViewport" parent="Mirror"]
+size = Vector2i(1920, 1080)
+render_target_clear_mode = 1
+render_target_update_mode = 4
+
+[node name="MirrorCamera" type="Camera3D" parent="Mirror/SubViewport"]
+transform = Transform3D(-4.37114e-08, 3.48787e-16, 1, 3.48787e-16, 1, -3.48787e-16, -1, 3.48787e-16, -4.37114e-08, 29.8, 4, 2.08165e-12)
+fov = 60.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Mirror"]
+mesh = SubResource("PlaneMesh_a52y4")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://objects/player.tscn")
