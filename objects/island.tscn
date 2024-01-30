@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=3 uid="uid://ryigc5xgsi20"]
 
-[ext_resource type="Script" path="res://scripts/island.gd" id="1_bnffu"]
+[ext_resource type="Script" path="res://scripts/terrain/island.gd" id="1_bnffu"]
 [ext_resource type="Shader" path="res://shaders/island.gdshader" id="2_itim3"]
-[ext_resource type="Script" path="res://scripts/collider.gd" id="3_tuwhy"]
+[ext_resource type="Script" path="res://scripts/terrain/collider.gd" id="3_tuwhy"]
 
 [sub_resource type="Gradient" id="Gradient_s0ik6"]
 offsets = PackedFloat32Array(0.258621, 0.282178)

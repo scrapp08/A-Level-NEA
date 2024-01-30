@@ -1,0 +1,62 @@
+[gd_scene load_steps=8 format=3 uid="uid://blwx07j4okvds"]
+
+[ext_resource type="Script" path="res://scripts/world.gd" id="1_1u8kd"]
+[ext_resource type="PackedScene" uid="uid://cnareske831tl" path="res://objects/menus/main_menu.tscn" id="2_0db1n"]
+[ext_resource type="PackedScene" uid="uid://cqdhu80i4y0v0" path="res://objects/environment.tscn" id="3_cta6w"]
+[ext_resource type="PackedScene" uid="uid://vm24d5eiwq0f" path="res://models/lobby.glb" id="4_fdtme"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_a52y4"]
+flip_faces = true
+size = Vector2(7.5, 4)
+subdivide_width = 4
+subdivide_depth = 4
+orientation = 0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_vuwrh"]
+viewport_path = NodePath("Lobby/Mirror/SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3oo8d"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_vuwrh")
+
+[node name="TestWorld" type="Node"]
+script = ExtResource("1_1u8kd")
+debug_local_multiplayer = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MainMenu" parent="CanvasLayer" instance=ExtResource("2_0db1n")]
+
+[node name="Environment" parent="." instance=ExtResource("3_cta6w")]
+
+[node name="Lobby" parent="." instance=ExtResource("4_fdtme")]
+
+[node name="Mirror" type="Node3D" parent="Lobby"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.9, 4, 2.08165e-12)
+metadata/_edit_group_ = true
+
+[node name="SubViewport" type="SubViewport" parent="Lobby/Mirror"]
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="MirrorCamera" type="Camera3D" parent="Lobby/Mirror/SubViewport"]
+transform = Transform3D(0.708685, 0, 0.705525, 0, 1, 0, -0.705525, 0, 0.708685, 29.75, 4, 5.004)
+fov = 60.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Lobby/Mirror"]
+mesh = SubResource("PlaneMesh_a52y4")
+surface_material_override/0 = SubResource("StandardMaterial3D_3oo8d")
+
+[node name="Countdown" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://objects/player.tscn")
+spawn_path = NodePath("..")
+
+[connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/VBoxContainer/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/VBoxContainer/Join" to="." method="_on_join_pressed"]
+[connection signal="timeout" from="Countdown" to="." method="_on_countdown_timeout"]
+
+[editable path="CanvasLayer/MainMenu"]

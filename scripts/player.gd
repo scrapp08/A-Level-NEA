@@ -9,7 +9,7 @@ extends CharacterBody3D
 
 var weapon: Weapon
 var weapon_index := 0
-var container_offset = Vector3(0.8, -1.0, -1.0)
+var container_offset = Vector3(0.6, -1, -0.7)
 var tween: Tween
 
 var mouse_sensitivity = 700
@@ -31,10 +31,13 @@ var paused := false
 @onready var health: Label = $HUD/Health
 @onready var ammo: Label = $HUD/Ammo
 @onready var ip: Label = $HUD/IP
+@onready var game_countdown: Label = $HUD/Countdown
 
 @onready var pause_menu: Control = $PauseMenu
 @onready var loadout: PanelContainer = $PauseMenu/MarginContainer/Loadout
 @onready var options: VBoxContainer = $PauseMenu/MarginContainer/Options
+
+@onready var loading_screen: PanelContainer = $LoadingScreen
 
 @onready var sound_footsteps: AudioStreamPlayer = $SoundFootsteps
 @onready var cooldown: Timer = $Cooldown
@@ -53,8 +56,12 @@ func _ready() -> void:
 	health.text = str(health_value)
 
 	world.address.connect(_on_address)
+	world.game_countdown.connect(_on_game_countdown)
+	world.loading.connect(_on_loading)
 
 	_on_item_list_item_selected(weapon_index)
+
+	ammo.text = str(weapon.clip_size)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -119,7 +126,24 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_address(address: String) -> void:
+	if not is_multiplayer_authority(): return
+
 	ip.text = address
+	ip.show()
+
+
+func _on_game_countdown(time: int) -> void:
+	if not is_multiplayer_authority(): return
+
+	game_countdown.text = "Game Starting In: " + str(time)
+	game_countdown.show()
+
+
+func _on_loading(state: bool) -> void:
+	if state == true:
+		loading_screen.show()
+	elif state == false:
+		loading_screen.hide()
 
 
 func _on_resume_pressed() -> void:
@@ -176,7 +200,7 @@ func muzzle_animation(weapon_muzzle: Vector3) -> void:
 	muzzle.play("default")
 
 	muzzle.rotation_degrees.z = randf_range(-45, 45)
-	muzzle.scale = Vector3.ONE * randf_range(0.40, 0.75)
+	muzzle.scale = Vector3.ONE * randf_range(0.20, 0.40)
 	muzzle.position = container.position - weapon_muzzle
 
 
@@ -191,6 +215,8 @@ func initiate_change_weapon(index) -> void:
 
 
 func change_weapon() -> void:
+	if not is_multiplayer_authority(): return
+
 	weapon = weapons[weapon_index]
 
 	# Step 1. Remove previous weapon model(s) from container
@@ -211,6 +237,7 @@ func change_weapon() -> void:
 	# Set weapon data
 	ray_cast.target_position = Vector3(0, 0, -1) * weapon.max_distance
 	crosshair.texture = weapon.crosshair
+	ammo.text = str(weapon.clip_size)
 
 
 func _pause(status: bool) -> void:
@@ -227,8 +254,11 @@ func _pause(status: bool) -> void:
 
 
 func _action_shoot() -> void:
+	if not is_multiplayer_authority(): return
+
 	if !cooldown.is_stopped(): return # Cooldown for shooting
 	if paused: return
+	if weapon.clip_size == 0: return
 
 	Audio.play(weapon.sound_shoot)
 
@@ -239,6 +269,10 @@ func _action_shoot() -> void:
 
 	# Shoot the weapon, amount based on shot count
 	for n in weapon.shot_count:
+		weapon.clip_size -= 1
+		ammo.text = str(weapon.clip_size)
+		if weapon.clip_size == 0: return
+
 		ray_cast.target_position.x = randf_range(-weapon.spread, weapon.spread)
 		ray_cast.target_position.y = randf_range(-weapon.spread, weapon.spread)
 
@@ -257,4 +291,3 @@ func _action_shoot() -> void:
 
 	container.position.z += float(weapon.knockback) / 100.0 # Knockback of weapon visual
 	camera.rotation.x += float(weapon.knockback) / 1000.0 # Knockback of camera
-
