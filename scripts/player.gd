@@ -26,7 +26,7 @@ var paused := false
 @onready var muzzle: AnimatedSprite3D = $Head/Camera/Muzzle
 @onready var ray_cast: RayCast3D = $Head/Camera/RayCast
 
-@onready var world = get_parent()
+#@onready var world = get_parent()
 @onready var crosshair: TextureRect = $HUD/Crosshair
 @onready var health: Label = $HUD/Health
 @onready var ammo: Label = $HUD/Ammo
@@ -55,9 +55,9 @@ func _ready() -> void:
 
 	health.text = str(health_value)
 
-	world.address.connect(_on_address)
-	world.game_countdown.connect(_on_game_countdown)
-	world.loading.connect(_on_loading)
+	#world.address.connect(_on_address)
+	#world.game_countdown.connect(_on_game_countdown)
+	#world.loading.connect(_on_loading)
 
 	_on_item_list_item_selected(weapon_index)
 

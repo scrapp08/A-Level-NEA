@@ -1,0 +1,115 @@
+[gd_scene load_steps=4 format=3 uid="uid://cnareske831tl"]
+
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_fks2m"]
+[ext_resource type="Theme" uid="uid://c6gw6kxkem77m" path="res://themes/ui_theme.tres" id="2_s3t6c"]
+[ext_resource type="Script" path="res://scripts/lobby.gd" id="3_gcv34"]
+
+[node name="Level" type="Node"]
+script = ExtResource("1_fks2m")
+
+[node name="UI" type="PanelContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_s3t6c")
+
+[node name="MarginContainer" type="MarginContainer" parent="UI"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MainMenu" type="Label" parent="UI/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Main Menu"
+vertical_alignment = 1
+
+[node name="NameEdit" type="LineEdit" parent="UI/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Name..."
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="UI/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Host" type="Button" parent="UI/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+layout_mode = 2
+text = "Host"
+
+[node name="Spacer" type="Control" parent="UI/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="Connect" type="Button" parent="UI/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+layout_mode = 2
+text = "Connect"
+
+[node name="Disconnect" type="Button" parent="UI/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Disconnect
+"
+
+[node name="Hostname" type="LineEdit" parent="UI/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+placeholder_text = "Hostname"
+
+[node name="Lobby" type="Control" parent="UI/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("3_gcv34")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer/VBoxContainer/Lobby"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="UI/MarginContainer/VBoxContainer/Lobby/VBoxContainer"]
+layout_mode = 2
+text = "Players:"
+
+[node name="PlayerList" type="ItemList" parent="UI/MarginContainer/VBoxContainer/Lobby/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+same_column_width = true
+
+[node name="Begin" type="Button" parent="UI/MarginContainer/VBoxContainer/Lobby/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "Start Game!"
+
+[node name="AcceptDialog" type="AcceptDialog" parent="UI"]
+initial_position = 1
+size = Vector2i(370, 120)
+dialog_text = "Connection Closed!"
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://scenes/testworld.tscn")
+spawn_path = NodePath("..")
+
+[connection signal="pressed" from="UI/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer/Connect" to="." method="_on_connect_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer/Disconnect" to="." method="_on_disconnect_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/VBoxContainer/Lobby/VBoxContainer/Begin" to="." method="_on_begin_pressed"]

@@ -67,7 +67,7 @@ func _world_to_texture_value(coordinate: Vector3) -> float:
 	var texture_coordinate : Vector2i
 	texture_coordinate.x = int(remap(coordinate.x, bottom_left.x, top_right.x, 0.0, noise_width))
 	texture_coordinate.y = int(remap(coordinate.z, bottom_left.y, top_right.y, 0.0, noise_height))
-	print(noise.noise.get_image(noise_width, noise_height))
+	print(noise.noise.get_noise_2dv(texture_coordinate))
 	return noise.noise.get_noise_2dv(texture_coordinate)
 
 
