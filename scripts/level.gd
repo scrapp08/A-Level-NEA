@@ -1,10 +1,14 @@
 extends Node
 
+signal scoreboard(scoreboard: Dictionary, players: Array)
+
 const DEFAULT_SERVER_IP := "127.0.0.1" # IPv4 localhost
 const PORT := 9999
 const PLAYER := preload("res://objects/player.tscn")
 
 var peer = null
+var players
+@export var score := {}
 
 @onready var multiplayerPeer = ENetMultiplayerPeer.new()
 
@@ -18,6 +22,7 @@ var peer = null
 
 @onready var lobby: Control = $UI/MarginContainer/VBoxContainer/Lobby
 @onready var level = $"."
+
 
 func _ready():
 	multiplayer.peer_connected.connect(_peer_connected)
@@ -107,12 +112,22 @@ func _on_begin_pressed() -> void:
 
 	for p in lobby._players:
 		_add_player(world, p)
+		score[p] = 0
+	players = lobby.get_players()
+	print(score)
+
+
+func _on_point(player: int) -> void:
+	score[player] += 1
+	print(score)
+	scoreboard.emit(score, players)
 
 
 func _add_player(world, position) -> void:
 	var player = PLAYER.instantiate()
 	player.name = str(position)
 	world.add_child(player)
+	player.point.connect(_on_point)
 
 
 @rpc("call_local")

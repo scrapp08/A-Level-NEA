@@ -1,6 +1,6 @@
 extends Control
 
-@export var _players = []
+@export var _players := []
 
 @onready var player_list = $VBoxContainer/PlayerList
 @onready var begin_button = $VBoxContainer/Begin
@@ -62,3 +62,7 @@ func on_peer_del(id):
 	if not multiplayer.is_server():
 		return
 	rpc("del_player", id)
+
+
+func get_players():
+	return _players

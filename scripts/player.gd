@@ -1,11 +1,16 @@
 extends CharacterBody3D
 
+signal point(value: int)
+
 @export_subgroup("Properties")
 @export var movement_speed := 6
 @export var jump_strength := 9
 
 @export_subgroup("Weapons")
 @export var weapons: Array[Weapon] = []
+
+@export var red_score_value: int
+@export var blue_score_value: int
 
 var weapon: Weapon
 var weapon_index := 0
@@ -26,12 +31,13 @@ var paused := false
 @onready var muzzle: AnimatedSprite3D = $Head/Camera/Muzzle
 @onready var ray_cast: RayCast3D = $Head/Camera/RayCast
 
-#@onready var world = get_parent()
+@onready var world = get_parent().get_parent()
 @onready var crosshair: TextureRect = $HUD/Crosshair
 @onready var health: Label = $HUD/Health
 @onready var ammo: Label = $HUD/Ammo
-@onready var ip: Label = $HUD/IP
-@onready var game_countdown: Label = $HUD/Countdown
+
+@onready var red_score: Label = $HUD/Scoreboard/RedScore/Label
+@onready var blue_score: Label = $HUD/Scoreboard/BlueScore/Label
 
 @onready var pause_menu: Control = $PauseMenu
 @onready var loadout: PanelContainer = $PauseMenu/MarginContainer/Loadout
@@ -62,6 +68,8 @@ func _ready() -> void:
 	_on_item_list_item_selected(weapon_index)
 
 	ammo.text = str(weapon.clip_size)
+
+	world.scoreboard.connect(_on_scoreboard)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -125,20 +133,6 @@ func _physics_process(delta: float) -> void:
 	previously_floored = is_on_floor()
 
 
-func _on_address(address: String) -> void:
-	if not is_multiplayer_authority(): return
-
-	ip.text = address
-	ip.show()
-
-
-func _on_game_countdown(time: int) -> void:
-	if not is_multiplayer_authority(): return
-
-	game_countdown.text = "Game Starting In: " + str(time)
-	game_countdown.show()
-
-
 func _on_loading(state: bool) -> void:
 	if state == true:
 		loading_screen.show()
@@ -171,6 +165,21 @@ func _on_back_pressed() -> void:
 	options.show()
 
 
+func _on_scoreboard(score: Dictionary, players: Array) -> void:
+	print(score)
+	print(players)
+	red_score_value = score[players[0]]
+	blue_score_value = score[players[1]]
+
+	_update_scoreboard.rpc(red_score_value, blue_score_value)
+
+
+@rpc("call_local")
+func _update_scoreboard(rsv, bsv) -> void:
+	red_score.text = str(rsv)
+	blue_score.text = str(bsv)
+
+
 @rpc("any_peer")
 func recieve_damage(amount: int) -> void:
 	health_value -= amount
@@ -181,6 +190,7 @@ func recieve_damage(amount: int) -> void:
 		health_value = 200
 		health.text = str(health_value)
 		position = Vector3.ZERO
+		point.emit(str(name).to_int())
 
 
 @rpc("call_local")
