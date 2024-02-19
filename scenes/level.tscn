@@ -1,11 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://cnareske831tl"]
+[gd_scene load_steps=5 format=3 uid="uid://cnareske831tl"]
 
 [ext_resource type="Script" path="res://scripts/level.gd" id="1_fks2m"]
 [ext_resource type="Theme" uid="uid://c6gw6kxkem77m" path="res://themes/ui_theme.tres" id="2_s3t6c"]
+[ext_resource type="PackedScene" uid="uid://8yw3lpu0bdgw" path="res://objects/menus/scoreboard.tscn" id="2_w7atl"]
 [ext_resource type="Script" path="res://scripts/lobby.gd" id="3_gcv34"]
 
 [node name="Level" type="Node"]
 script = ExtResource("1_fks2m")
+
+[node name="Scoreboard" parent="." instance=ExtResource("2_w7atl")]
+visible = false
 
 [node name="UI" type="PanelContainer" parent="."]
 anchors_preset = 15
@@ -113,3 +117,5 @@ spawn_path = NodePath("..")
 [connection signal="pressed" from="UI/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer/Connect" to="." method="_on_connect_pressed"]
 [connection signal="pressed" from="UI/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer/Disconnect" to="." method="_on_disconnect_pressed"]
 [connection signal="pressed" from="UI/MarginContainer/VBoxContainer/Lobby/VBoxContainer/Begin" to="." method="_on_begin_pressed"]
+
+[editable path="Scoreboard"]

@@ -69,8 +69,6 @@ func _ready() -> void:
 
 	ammo.text = str(weapon.clip_size)
 
-	world.scoreboard.connect(_on_scoreboard)
-
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_multiplayer_authority(): return
@@ -163,21 +161,6 @@ func _on_item_list_item_selected(index: int) -> void:
 func _on_back_pressed() -> void:
 	loadout.hide()
 	options.show()
-
-
-func _on_scoreboard(score: Dictionary, players: Array) -> void:
-	print(score)
-	print(players)
-	red_score_value = score[players[0]]
-	blue_score_value = score[players[1]]
-
-	_update_scoreboard.rpc(red_score_value, blue_score_value)
-
-
-@rpc("call_local")
-func _update_scoreboard(rsv, bsv) -> void:
-	red_score.text = str(rsv)
-	blue_score.text = str(bsv)
 
 
 @rpc("any_peer")

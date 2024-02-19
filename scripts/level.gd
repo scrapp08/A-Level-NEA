@@ -1,7 +1,5 @@
 extends Node
 
-signal scoreboard(scoreboard: Dictionary, players: Array)
-
 const DEFAULT_SERVER_IP := "127.0.0.1" # IPv4 localhost
 const PORT := 9999
 const PLAYER := preload("res://objects/player.tscn")
@@ -19,6 +17,10 @@ var players
 @onready var hostname: LineEdit = $UI/MarginContainer/VBoxContainer/HBoxContainer2/Hostname
 @onready var player_list: ItemList = $UI/MarginContainer/VBoxContainer/Lobby/VBoxContainer/PlayerList
 @onready var begin: Button = $UI/MarginContainer/VBoxContainer/Lobby/VBoxContainer/Begin
+
+@onready var scoreboard: Control = $Scoreboard
+@onready var blue_score: Label = $Scoreboard/Score/BlueScore/Label
+@onready var red_score: Label = $Scoreboard/Score/RedScore/Label
 
 @onready var lobby: Control = $UI/MarginContainer/VBoxContainer/Lobby
 @onready var level = $"."
@@ -119,8 +121,11 @@ func _on_begin_pressed() -> void:
 
 func _on_point(player: int) -> void:
 	score[player] += 1
+	if player == 1:
+		red_score.text = str(1)
+	else:
+		blue_score.text = str(1)
 	print(score)
-	scoreboard.emit(score, players)
 
 
 func _add_player(world, position) -> void:
@@ -135,3 +140,4 @@ func _remove_ui() -> void:
 	var ui = level.get_node("UI")
 	level.remove_child(ui)
 	ui.queue_free()
+	scoreboard.show()
