@@ -113,11 +113,9 @@ func _on_begin_pressed() -> void:
 
 	for p in lobby._players:
 		_add_player(world, p)
-		score[str(p)] = 0
 
 
 func _on_point(player: String) -> void:
-	print("Calculating for: " + player)
 	score[player] += 1
 	if player == "1":
 		var red_score = score[player]
@@ -131,7 +129,13 @@ func _add_player(world, position) -> void:
 	var player = PLAYER.instantiate()
 	player.name = str(position)
 	world.add_child(player)
-	player.point.connect(_on_point)
+	initialise_score.rpc(position)
+
+
+@rpc("call_local")
+func initialise_score(position) -> void:
+	score[str(position)] = 0
+
 
 
 @rpc("call_local")
@@ -142,7 +146,7 @@ func _remove_ui() -> void:
 	scoreboard.show()
 
 
-@rpc("call_local")
+@rpc("call_local", "any_peer")
 func update_score(score_value, player) -> void:
 	if player == 1:
 		red_label.text = str(score_value)

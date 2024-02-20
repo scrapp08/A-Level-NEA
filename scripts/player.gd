@@ -58,13 +58,12 @@ func _ready() -> void:
 
 	health.text = str(health_value)
 
-	#world.address.connect(_on_address)
-	#world.game_countdown.connect(_on_game_countdown)
-	#world.loading.connect(_on_loading)
+	get_tree().create_timer(1).timeout.connect(func() -> void:
+		_on_item_list_item_selected(weapon_index)
+		ammo.text = str(weapon.clip_size)
+		)
 
-	_on_item_list_item_selected(weapon_index)
-
-	ammo.text = str(weapon.clip_size)
+	point.connect(get_parent().get_parent()._on_point)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -170,7 +169,6 @@ func recieve_damage(amount: int) -> void:
 		health.text = str(health_value)
 		position = Vector3.ZERO
 		point.emit(str(name))
-		print(str(name) + " emitting.")
 
 
 @rpc("call_local")
