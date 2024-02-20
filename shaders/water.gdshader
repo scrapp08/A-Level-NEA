@@ -59,13 +59,6 @@ uniform float foam_fresnel_smoothing = 0.0;
 
 uniform float wave_time_scale = 1.0;
 
-// Dampening map
-uniform bool gen_falloff = true;
-uniform sampler2D noise : hint_default_black;
-uniform float dampening_amplitude = 0.0;
-uniform float falloff_start = 0.0;
-uniform float falloff_end = 1.0;
-
 varying vec3 world_position;
 varying vec3 vertex_position;
 varying vec3 vertex_normal;
@@ -113,18 +106,6 @@ vec2 align_with_grab_texel(vec2 xy) {
 
 vec3 srgb_to_linear(vec3 c) {
 	return c * (c * (c * 0.305306011 + 0.682171111) + 0.012522878);
-}
-
-void gen_dampening_map() {
-	if (gen_falloff) {
-		float value = srgb_to_linear(textureLod(noise, UV, 0).rgb).r;
-		VERTEX.y = value * amplitude * falloff(UV.x, UV.y) * 2.5;
-	}
-	else {
-		float value = srgb_to_linear(textureLod(noise, UV, 0).rgb).r;
-//		float value = textureLod(noise, UV, 0).r;
-		VERTEX.y = value * amplitude;
-	}
 }
 
 

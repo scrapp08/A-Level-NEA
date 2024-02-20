@@ -5,8 +5,7 @@ const PORT := 9999
 const PLAYER := preload("res://objects/player.tscn")
 
 var peer = null
-var players
-@export var score := {}
+var score := {}
 
 @onready var multiplayerPeer = ENetMultiplayerPeer.new()
 
@@ -19,8 +18,8 @@ var players
 @onready var begin: Button = $UI/MarginContainer/VBoxContainer/Lobby/VBoxContainer/Begin
 
 @onready var scoreboard: Control = $Scoreboard
-@onready var blue_score: Label = $Scoreboard/Score/BlueScore/Label
-@onready var red_score: Label = $Scoreboard/Score/RedScore/Label
+@onready var blue_label: Label = $Scoreboard/Score/BlueScore/Label
+@onready var red_label: Label = $Scoreboard/Score/RedScore/Label
 
 @onready var lobby: Control = $UI/MarginContainer/VBoxContainer/Lobby
 @onready var level = $"."
@@ -114,18 +113,18 @@ func _on_begin_pressed() -> void:
 
 	for p in lobby._players:
 		_add_player(world, p)
-		score[p] = 0
-	players = lobby.get_players()
-	print(score)
+		score[str(p)] = 0
 
 
-func _on_point(player: int) -> void:
+func _on_point(player: String) -> void:
+	print("Calculating for: " + player)
 	score[player] += 1
-	if player == 1:
-		red_score.text = str(1)
+	if player == "1":
+		var red_score = score[player]
+		update_score.rpc(red_score, 1)
 	else:
-		blue_score.text = str(1)
-	print(score)
+		var blue_score = score[player]
+		update_score.rpc(blue_score, 2)
 
 
 func _add_player(world, position) -> void:
@@ -141,3 +140,12 @@ func _remove_ui() -> void:
 	level.remove_child(ui)
 	ui.queue_free()
 	scoreboard.show()
+
+
+@rpc("call_local")
+func update_score(score_value, player) -> void:
+	if player == 1:
+		red_label.text = str(score_value)
+	else:
+		blue_label.text = str(score_value)
+	pass

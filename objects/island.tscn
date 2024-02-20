@@ -11,14 +11,14 @@ colors = PackedColorArray(0.413751, 0.366211, 0.114845, 1, 0.00542721, 0.212752,
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_6kjaf"]
 gradient = SubResource("Gradient_s0ik6")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_mc5qu"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_p6iv3"]
 noise_type = 3
-frequency = 0.017
-fractal_lacunarity = 1.0
-fractal_gain = 1.0
+frequency = 0.009
+fractal_lacunarity = 1.25
+fractal_gain = 0.390001
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_6mag7"]
-noise = SubResource("FastNoiseLite_mc5qu")
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_irf81"]
+noise = SubResource("FastNoiseLite_p6iv3")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o6mdw"]
 render_priority = 0
@@ -29,7 +29,7 @@ shader_parameter/amplitude = 5.0
 shader_parameter/gen_falloff = false
 shader_parameter/falloff_start = 0.5
 shader_parameter/falloff_end = 1.0
-shader_parameter/noise = SubResource("NoiseTexture2D_6mag7")
+shader_parameter/noise = SubResource("NoiseTexture2D_irf81")
 shader_parameter/terrain_colour = SubResource("GradientTexture1D_6kjaf")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_qyd1g"]
@@ -44,8 +44,6 @@ size = Vector3(0.5, 0.5, 0.5)
 [node name="Island" type="Node3D"]
 script = ExtResource("1_bnffu")
 amplitude = 5.0
-collision = true
-render_vertices = true
 noise_scale = 0.17
 persistance = 1.0
 lacunarity = 1.0

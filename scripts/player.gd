@@ -36,9 +36,6 @@ var paused := false
 @onready var health: Label = $HUD/Health
 @onready var ammo: Label = $HUD/Ammo
 
-@onready var red_score: Label = $HUD/Scoreboard/RedScore/Label
-@onready var blue_score: Label = $HUD/Scoreboard/BlueScore/Label
-
 @onready var pause_menu: Control = $PauseMenu
 @onready var loadout: PanelContainer = $PauseMenu/MarginContainer/Loadout
 @onready var options: VBoxContainer = $PauseMenu/MarginContainer/Options
@@ -166,14 +163,14 @@ func _on_back_pressed() -> void:
 @rpc("any_peer")
 func recieve_damage(amount: int) -> void:
 	health_value -= amount
-
 	health.text = str(health_value)
 
 	if health_value <= 0:
 		health_value = 200
 		health.text = str(health_value)
 		position = Vector3.ZERO
-		point.emit(str(name).to_int())
+		point.emit(str(name))
+		print(str(name) + " emitting.")
 
 
 @rpc("call_local")
