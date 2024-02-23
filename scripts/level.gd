@@ -21,6 +21,9 @@ var score := {}
 @onready var blue_label: Label = $Scoreboard/Score/BlueScore/Label
 @onready var red_label: Label = $Scoreboard/Score/RedScore/Label
 
+@onready var win_screen: PanelContainer = $WinScreen
+@onready var winner_text: Label = $WinScreen/WinnerText
+
 @onready var lobby: Control = $UI/MarginContainer/VBoxContainer/Lobby
 @onready var level = $"."
 
@@ -150,6 +153,11 @@ func _remove_ui() -> void:
 func update_score(score_value, player) -> void:
 	if player == 1:
 		red_label.text = str(score_value)
+		if red_label.text == "4":
+			winner_text.text = "Red wins!"
+			win_screen.show()
 	else:
 		blue_label.text = str(score_value)
-	pass
+		if blue_label.text == "4":
+			winner_text.text = "Blue wins!"
+			win_screen.show()

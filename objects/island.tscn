@@ -11,14 +11,14 @@ colors = PackedColorArray(0.413751, 0.366211, 0.114845, 1, 0.00542721, 0.212752,
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_6kjaf"]
 gradient = SubResource("Gradient_s0ik6")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_p6iv3"]
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_tk8fy"]
 noise_type = 3
-frequency = 0.009
-fractal_lacunarity = 1.25
-fractal_gain = 0.390001
+frequency = 0.017
+fractal_lacunarity = 1.0
+fractal_gain = 1.0
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_irf81"]
-noise = SubResource("FastNoiseLite_p6iv3")
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_4lxvo"]
+noise = SubResource("FastNoiseLite_tk8fy")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o6mdw"]
 render_priority = 0
@@ -29,7 +29,7 @@ shader_parameter/amplitude = 5.0
 shader_parameter/gen_falloff = false
 shader_parameter/falloff_start = 0.5
 shader_parameter/falloff_end = 1.0
-shader_parameter/noise = SubResource("NoiseTexture2D_irf81")
+shader_parameter/noise = SubResource("NoiseTexture2D_4lxvo")
 shader_parameter/terrain_colour = SubResource("GradientTexture1D_6kjaf")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_qyd1g"]
@@ -51,8 +51,8 @@ falloff_start = 0.5
 falloff_end = 1.0
 terrain_colour = SubResource("GradientTexture1D_6kjaf")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+[node name="DEBUGDirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866026, -0.500003, 0.749999, -0.43301, 0, 0, 0)
 shadow_enabled = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -61,9 +61,9 @@ mesh = SubResource("PlaneMesh_qyd1g")
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 script = ExtResource("3_tuwhy")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+[node name="DEBUGMeshInstance3D2" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.252923, 1.82689, -0.252187)
 mesh = SubResource("BoxMesh_fva77")
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="DEBUGCamera3D" type="Camera3D" parent="."]
 transform = Transform3D(0.992005, 0.0242817, -0.123839, 0.008928, 0.965352, 0.260798, 0.125881, -0.259818, 0.957418, 2.08165e-12, 7.23598, 15.2841)

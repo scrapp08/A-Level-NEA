@@ -96,5 +96,3 @@ func _spawn_sphere(position: Vector3) -> MeshInstance3D:
 	sphere.height = 0.2
 	instance.mesh = sphere
 	return instance
-
-

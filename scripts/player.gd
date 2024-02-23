@@ -9,9 +9,6 @@ signal point(value: int)
 @export_subgroup("Weapons")
 @export var weapons: Array[Weapon] = []
 
-@export var red_score_value: int
-@export var blue_score_value: int
-
 var weapon: Weapon
 var weapon_index := 0
 var container_offset = Vector3(0.6, -1, -0.7)
@@ -31,7 +28,6 @@ var paused := false
 @onready var muzzle: AnimatedSprite3D = $Head/Camera/Muzzle
 @onready var ray_cast: RayCast3D = $Head/Camera/RayCast
 
-@onready var world = get_parent().get_parent()
 @onready var crosshair: TextureRect = $HUD/Crosshair
 @onready var health: Label = $HUD/Health
 @onready var ammo: Label = $HUD/Ammo

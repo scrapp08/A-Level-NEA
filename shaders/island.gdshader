@@ -1,15 +1,11 @@
 shader_type spatial;
 render_mode world_vertex_coords;
 
-//#include "res://assets/shaders/heightmap.gdshaderinc"
-
 // Debug
 uniform bool debug_noise = false;
 uniform bool debug_falloff = false;
 
 // Mesh
-//uniform int size = 150;
-//uniform int resolution = 300;
 uniform float amplitude = 0.0;
 
 // Noise
@@ -23,7 +19,6 @@ uniform float falloff_end = 1.0;
 uniform sampler2D terrain_colour;
 
 varying vec3 vertex_position;
-
 
 
 vec3 srgb_to_linear(vec3 c) {

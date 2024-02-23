@@ -109,6 +109,21 @@ initial_position = 1
 size = Vector2i(370, 120)
 dialog_text = "Connection Closed!"
 
+[node name="WinScreen" type="PanelContainer" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_s3t6c")
+
+[node name="WinnerText" type="Label" parent="WinScreen"]
+layout_mode = 2
+text = "Red wins!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://scenes/testworld.tscn")
 spawn_path = NodePath("..")
