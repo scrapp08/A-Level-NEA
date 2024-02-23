@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://cvfmf0b3bs5xn"]
+
+[ext_resource type="Material" uid="uid://syygwpvwwnyd" path="res://materials/jump_item.tres" id="1_0rypf"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_l6rrh"]
+material = ExtResource("1_0rypf")
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_t240b"]
+
+[node name="JumpItem" type="StaticBody3D"]
+collision_layer = 2
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_l6rrh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_t240b")

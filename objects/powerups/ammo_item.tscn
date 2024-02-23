@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://ddt7ufe3vvqxq"]
+
+[ext_resource type="PackedScene" uid="uid://s48n8qrkmjqn" path="res://models/ammo.glb" id="1_m80pw"]
+[ext_resource type="Script" path="res://scripts/powerups/ammo.gd" id="1_n3agn"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i2icy"]
+radius = 0.3
+height = 1.0
+
+[node name="Ammo" type="StaticBody3D"]
+collision_layer = 2
+script = ExtResource("1_n3agn")
+
+[node name="Model" parent="." instance=ExtResource("1_m80pw")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_i2icy")

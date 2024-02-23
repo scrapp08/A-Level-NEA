@@ -1,0 +1,23 @@
+extends Node3D
+
+@onready var raycast : RayCast3D = get_parent()
+@onready var raycast_owner := get_parent().get_owner()
+@onready var wall := preload("res://objects/powerups/wall/wall.tscn")
+
+
+func _ready() -> void:
+	set_as_top_level(true)
+	global_transform.origin = raycast.get_collision_point()
+
+
+func _input(event: InputEvent) -> void:
+	if Input.is_action_just_pressed("shoot"):
+		var w = wall.instantiate()
+		w.global_transform = global_transform
+		get_tree().get_root().add_child(w)
+		queue_free()
+
+
+func _process(delta: float) -> void:
+	global_transform.origin = raycast.get_collision_point()
+	rotation = raycast_owner.rotation
