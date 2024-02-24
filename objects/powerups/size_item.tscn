@@ -1,5 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://b4guydt71cfau"]
+[gd_scene load_steps=5 format=3 uid="uid://b4guydt71cfau"]
 
+[ext_resource type="Script" path="res://scripts/powerups/size_item.gd" id="1_6bp20"]
 [ext_resource type="Material" uid="uid://cjom0hja3deow" path="res://materials/size_item.tres" id="1_vpexh"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_udkya"]
@@ -7,11 +8,14 @@ material = ExtResource("1_vpexh")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_5kk14"]
 
-[node name="SizeItem" type="StaticBody3D"]
+[node name="SizeItem" type="Area3D"]
 collision_layer = 2
+script = ExtResource("1_6bp20")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_udkya")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_5kk14")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

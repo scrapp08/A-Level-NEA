@@ -23,6 +23,10 @@ var previously_floored := false
 var health_value := 200
 var paused := false
 
+@onready var body: MeshInstance3D = $Body
+@onready var collider: CollisionShape3D = $Collider
+@onready var head: Node3D = $Head
+
 @onready var camera = $Head/Camera
 @onready var container: Node3D = $Head/Camera/Container
 @onready var muzzle: AnimatedSprite3D = $Head/Camera/Muzzle
@@ -40,6 +44,8 @@ var paused := false
 
 @onready var sound_footsteps: AudioStreamPlayer = $SoundFootsteps
 @onready var cooldown: Timer = $Cooldown
+
+@onready var wall_sprite = preload("res://objects/powerups/wall/wallsprite.tscn")
 
 
 func _enter_tree() -> void:
@@ -92,7 +98,7 @@ func _physics_process(delta: float) -> void:
 	if gravity > 0 and is_on_floor():
 		gravity = 0
 
-	if Input.is_action_pressed("shoot"):
+	if Input.is_action_pressed("primary_attack"):
 		_action_shoot()
 
 	# Movement
@@ -222,6 +228,36 @@ func change_weapon() -> void:
 	ray_cast.target_position = Vector3(0, 0, -1) * weapon.max_distance
 	crosshair.texture = weapon.crosshair
 	ammo.text = str(weapon.clip_size)
+
+
+func add_ammo() -> void:
+	if not is_multiplayer_authority(): return
+
+	weapon.clip_size = weapon.max_clip_size
+	ammo.text = str(weapon.clip_size)
+
+
+func activate_wall() -> void:
+	var ws = wall_sprite.instantiate()
+	add_child(ws)
+
+
+func increase_jump() -> void:
+	jump_strength = 13
+
+
+func decrease_size() -> void:
+	var new_mesh := CapsuleMesh.new()
+	new_mesh.height = 1.0
+	new_mesh.radius = 0.25
+	body.mesh = new_mesh
+
+	var new_collider := CapsuleShape3D.new()
+	new_collider.height = 1.0
+	new_collider.radius = 0.25
+	collider.shape = new_collider
+
+	head.position = Vector3(0, 1.5, 0)
 
 
 func _pause(status: bool) -> void:

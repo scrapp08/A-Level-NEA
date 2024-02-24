@@ -5,7 +5,7 @@
 
 [sub_resource type="BoxMesh" id="BoxMesh_1iacc"]
 material = ExtResource("2_6y6u0")
-size = Vector3(4, 2.5, 0.5)
+size = Vector3(6, 4, 0.5)
 
 [node name="WallSprite" type="Node3D"]
 script = ExtResource("1_hinl5")
