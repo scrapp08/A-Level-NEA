@@ -48,23 +48,12 @@ func generate_collision(data) -> void:
 				add_child(sphere_mesh)
 
 
-func _world_to_texture_coordinate(coordinate: Vector3) -> Vector2i:
-	var bottom_left := Vector2(size * -0.5, size * -0.5)
-	var top_right := Vector2(size * 0.5, size * 0.5)
-	var noise_width := noise.width
-	var noise_height := noise.height
-	var texture_coordinate : Vector2i
-	texture_coordinate.x = int(remap(coordinate.x, bottom_left.x, top_right.x, 0.0, noise_width))
-	texture_coordinate.y = int(remap(coordinate.z, bottom_left.y, top_right.y, 0.0, noise_height))
-	return texture_coordinate
-
-
 func _world_to_texture_value(coordinate: Vector3) -> float:
 	var bottom_left := Vector2(size * -0.5, size * -0.5)
 	var top_right := Vector2(size * 0.5, size * 0.5)
 	var noise_width := noise.width
 	var noise_height := noise.height
-	var texture_coordinate : Vector2i
+	var texture_coordinate: Vector2i
 	texture_coordinate.x = int(remap(coordinate.x, bottom_left.x, top_right.x, 0.0, noise_width))
 	texture_coordinate.y = int(remap(coordinate.z, bottom_left.y, top_right.y, 0.0, noise_height))
 	print(noise.noise.get_noise_2dv(texture_coordinate))

@@ -100,10 +100,3 @@ secondary_attack={
 [rendering]
 
 anti_aliasing/quality/screen_space_aa=1
-
-[shader_globals]
-
-viewmodel_fov={
-"type": "float",
-"value": 45.0
-}
