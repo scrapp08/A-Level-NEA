@@ -167,7 +167,7 @@ func recieve_damage(amount: int) -> void:
 	health.text = str(health_value)
 
 	if health_value <= 0:
-		health_valuea = 200
+		health_value = 200
 		health.text = str(health_value)
 		position = Vector3(0.0, 20.0, 0.0)
 		point.emit(str(name))
