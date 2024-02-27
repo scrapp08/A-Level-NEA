@@ -24,7 +24,7 @@ var health_value := 200
 var paused := false
 
 @onready var body: MeshInstance3D = $Body
-@onready var collider: CollisionShape3D = $Collider
+@onready var collision_shape: CollisionShape3D = $Collider
 @onready var head: Node3D = $Head
 
 @onready var camera = $Head/Camera
@@ -167,9 +167,9 @@ func recieve_damage(amount: int) -> void:
 	health.text = str(health_value)
 
 	if health_value <= 0:
-		health_value = 200
+		health_valuea = 200
 		health.text = str(health_value)
-		position = Vector3.ZERO
+		position = Vector3(0.0, 20.0, 0.0)
 		point.emit(str(name))
 
 
@@ -255,7 +255,7 @@ func decrease_size() -> void:
 	var new_collider := CapsuleShape3D.new()
 	new_collider.height = 1.0
 	new_collider.radius = 0.25
-	collider.shape = new_collider
+	collision_shape.shape = new_collider
 
 	head.position = Vector3(0, 1.5, 0)
 

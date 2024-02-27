@@ -107,12 +107,12 @@ func _on_connect_pressed():
 
 
 func _on_begin_pressed() -> void:
-	var scene = load("res://scenes/testworld.tscn")
+	var scene = load("res://scenes/world.tscn")
 	_remove_ui.rpc()
 
 	level.add_child(scene.instantiate())
 
-	var world = level.get_node("TestWorld")
+	var world = level.get_node("World")
 
 	for p in lobby._players:
 		_add_player(world, p)
@@ -131,6 +131,7 @@ func _on_point(player: String) -> void:
 func _add_player(world, position) -> void:
 	var player = PLAYER.instantiate()
 	player.name = str(position)
+	player.position = Vector3(0.0, 20.0, 0.0)
 	world.add_child(player)
 	initialise_score.rpc(position)
 
@@ -138,7 +139,6 @@ func _add_player(world, position) -> void:
 @rpc("call_local")
 func initialise_score(position) -> void:
 	score[str(position)] = 0
-
 
 
 @rpc("call_local")

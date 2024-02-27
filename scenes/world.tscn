@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://d4nwrlltwj2of"]
+[gd_scene load_steps=7 format=3 uid="uid://d4nwrlltwj2of"]
 
 [ext_resource type="PackedScene" uid="uid://cqdhu80i4y0v0" path="res://objects/environment.tscn" id="1_45u85"]
 [ext_resource type="PackedScene" uid="uid://8doh4v8jqvsa" path="res://objects/island.tscn" id="2_hwkxp"]
+[ext_resource type="Texture2D" uid="uid://bnupofn41ymd6" path="res://materials/island_gradient.tres" id="3_jdjkf"]
 [ext_resource type="Shader" path="res://shaders/water.gdshader" id="3_pt7oc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hfu61"]
@@ -61,10 +62,18 @@ subdivide_depth = 500
 
 [node name="Environment" parent="." instance=ExtResource("1_45u85")]
 
-[node name="Island" parent="." instance=ExtResource("2_hwkxp")]
+[node name="Map" type="Node" parent="."]
+
+[node name="Island" parent="Map" instance=ExtResource("2_hwkxp")]
 amplitude = 5
+terrain_colour = ExtResource("3_jdjkf")
 metadata/_edit_lock_ = true
 
-[node name="Water" type="MeshInstance3D" parent="."]
+[node name="Water" type="MeshInstance3D" parent="Map"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 5.79364, 2.08165e-12)
 mesh = SubResource("PlaneMesh_dioru")
+skeleton = NodePath("../..")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://objects/player.tscn")
+spawn_path = NodePath("..")
