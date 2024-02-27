@@ -1,93 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://d4nwrlltwj2of"]
+[gd_scene load_steps=3 format=3 uid="uid://d4nwrlltwj2of"]
 
 [ext_resource type="PackedScene" uid="uid://cqdhu80i4y0v0" path="res://objects/environment.tscn" id="1_45u85"]
-[ext_resource type="PackedScene" uid="uid://8doh4v8jqvsa" path="res://objects/island.tscn" id="2_hwkxp"]
-[ext_resource type="Texture2D" uid="uid://bnupofn41ymd6" path="res://materials/island_gradient.tres" id="3_jdjkf"]
-[ext_resource type="Shader" path="res://shaders/water.gdshader" id="3_pt7oc"]
-[ext_resource type="PackedScene" uid="uid://ce6trxwibeia3" path="res://addons/kenney_nature-kit/Models/GLTF format/cliff_large_stone.glb" id="5_fakds"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hfu61"]
-render_priority = 0
-shader = ExtResource("3_pt7oc")
-shader_parameter/_debug_dampen = false
-shader_parameter/_debug_depth_tex = false
-shader_parameter/_debug_fresnel = false
-shader_parameter/_debug_normal_frag = false
-shader_parameter/_debug_normal_vert = false
-shader_parameter/_debug_refract = false
-shader_parameter/_debug_refract_glitch = false
-shader_parameter/_debug_water_depth = false
-shader_parameter/_debug_water_height = false
-shader_parameter/_debug_ztest = false
-shader_parameter/dampening_uv_offset = Vector2(0.5, 0.5)
-shader_parameter/dampening_uv_scale = 0.04
-shader_parameter/dampening_scale = 2.08165e-12
-shader_parameter/dampening_offset = Vector2(0.5, 1)
-shader_parameter/dampening_ratio_wavelength = -1.0
-shader_parameter/dampening_ratio_steepness = 20.0
-shader_parameter/dampening_ratio_velocity = 1.0
-shader_parameter/shallow_color = Color(0, 0.501961, 0.65098, 0.8)
-shader_parameter/deep_color = Color(0.0901961, 0.239216, 0.321569, 1)
-shader_parameter/sss_enabled = true
-shader_parameter/sss_strength = 1.0
-shader_parameter/sss_color = Color(0.239216, 0.878431, 0.619608, 0.8)
-shader_parameter/sss_trans_depth = 1000.0
-shader_parameter/sss_trans_boost = 1.0
-shader_parameter/test_back_light = false
-shader_parameter/test_backlight_color = Color(0, 0, 0, 1)
-shader_parameter/metallic = 0.0
-shader_parameter/roughness = 0.025
-shader_parameter/wave_a = Vector4(1, 2.08165e-12, 0.4, 3)
-shader_parameter/wave_a_on = true
-shader_parameter/wave_b = Vector4(0.5, 0.2, 0.2, 3)
-shader_parameter/wave_b_on = true
-shader_parameter/wave_c = Vector4(0.5, -0.2, 0.15, 6)
-shader_parameter/wave_c_on = true
-shader_parameter/wave_d = Vector4(0.82, 0.84, 0.07, 1.44)
-shader_parameter/wave_d_on = true
-shader_parameter/depth_fade_distance = 1.16
-shader_parameter/refraction_amount = 0.02
-shader_parameter/foam_color_edge = Color(1, 1, 1, 1)
-shader_parameter/foam_color_fresnel = Color(1, 1, 1, 1)
-shader_parameter/foam_scale = 0.3
-shader_parameter/foam_fresnel_smoothing = 0.0
-shader_parameter/wave_time_scale = 1.0
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_dioru"]
-material = SubResource("ShaderMaterial_hfu61")
-size = Vector2(250, 250)
-subdivide_width = 500
-subdivide_depth = 500
+[ext_resource type="PackedScene" uid="uid://cku8187kycems" path="res://scenes/map.tscn" id="2_ritdk"]
 
 [node name="World" type="Node"]
 
 [node name="Environment" parent="." instance=ExtResource("1_45u85")]
 
-[node name="Map" type="Node" parent="."]
-
-[node name="Island" parent="Map" instance=ExtResource("2_hwkxp")]
-amplitude = 5
-terrain_colour = ExtResource("3_jdjkf")
-metadata/_edit_lock_ = true
-
-[node name="Water" type="MeshInstance3D" parent="Map"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 6.37438, 2.08165e-12)
-mesh = SubResource("PlaneMesh_dioru")
-skeleton = NodePath("../..")
-
-[node name="Cliffs" type="Node" parent="Map"]
-
-[node name="Cliff" parent="Map/Cliffs" instance=ExtResource("5_fakds")]
-transform = Transform3D(250, 0, 0, 0, 20, 0, 0, 0, 200, 2.08165e-12, 2.08165e-12, 100)
-
-[node name="Cliff2" parent="Map/Cliffs" instance=ExtResource("5_fakds")]
-transform = Transform3D(-1.09278e-05, 6.97574e-15, 200, 8.71967e-14, 20, -6.97574e-14, -250, 6.97574e-15, -8.74228e-06, 100, 2.08165e-12, 2.08165e-12)
-
-[node name="Cliff3" parent="Map/Cliffs" instance=ExtResource("5_fakds")]
-transform = Transform3D(-250, 6.97574e-15, -1.74846e-05, 8.71967e-14, 20, -6.97574e-14, 2.18557e-05, -6.97574e-15, -200, 2.08165e-12, 2.08165e-12, -100)
-
-[node name="Cliff4" parent="Map/Cliffs" instance=ExtResource("5_fakds")]
-transform = Transform3D(-1.09278e-05, -6.97574e-15, -200, 8.71967e-14, 20, -6.97574e-14, 250, -6.97574e-15, -8.74228e-06, -100, 2.08165e-12, 2.08165e-12)
+[node name="Map" parent="." instance=ExtResource("2_ritdk")]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://objects/player.tscn")
