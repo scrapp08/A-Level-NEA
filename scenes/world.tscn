@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://d4nwrlltwj2of"]
 
 [ext_resource type="PackedScene" uid="uid://cqdhu80i4y0v0" path="res://objects/environment.tscn" id="1_45u85"]
-[ext_resource type="PackedScene" uid="uid://ryigc5xgsi20" path="res://objects/island.tscn" id="2_hwkxp"]
+[ext_resource type="PackedScene" uid="uid://8doh4v8jqvsa" path="res://objects/island.tscn" id="2_hwkxp"]
 [ext_resource type="Shader" path="res://shaders/water.gdshader" id="3_pt7oc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_hfu61"]
@@ -62,12 +62,9 @@ subdivide_depth = 500
 [node name="Environment" parent="." instance=ExtResource("1_45u85")]
 
 [node name="Island" parent="." instance=ExtResource("2_hwkxp")]
-size = 150
-resolution = 300
-noise_scale = 0.09
-persistance = 0.390001
-lacunarity = 1.25
+amplitude = 5
+metadata/_edit_lock_ = true
 
 [node name="Water" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.75, 2.08165e-12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 5.79364, 2.08165e-12)
 mesh = SubResource("PlaneMesh_dioru")
