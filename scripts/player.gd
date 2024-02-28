@@ -238,15 +238,21 @@ func add_ammo() -> void:
 
 
 func activate_wall() -> void:
+	if not is_multiplayer_authority(): return
+	
 	var ws = wall_sprite.instantiate()
 	add_child(ws)
 
 
 func increase_jump() -> void:
+	if not is_multiplayer_authority(): return
+	
 	jump_strength = 13
 
 
 func decrease_size() -> void:
+	if not is_multiplayer_authority(): return
+	
 	var new_mesh := CapsuleMesh.new()
 	new_mesh.height = 1.0
 	new_mesh.radius = 0.25
@@ -261,6 +267,8 @@ func decrease_size() -> void:
 
 
 func _pause(status: bool) -> void:
+	if not is_multiplayer_authority(): return
+	
 	if status:
 		Input.mouse_mode = Input.MOUSE_MODE_CONFINED
 		crosshair.hide()
