@@ -14,9 +14,10 @@ func spawn_features() -> void:
 		ray_cast_3d.target_position = random_position
 		print("Target set to: " + str(ray_cast_3d.target_position))
 
+		ray_cast_3d.force_raycast_update()
 		var collider = ray_cast_3d.get_collider()
 
-		if collider and collider.has_method("generate_island"):
+		if collider and collider.is_in_group("land"):
 			print("Spawning feature at: " + str(random_position))
 
 	water_collision.disabled = true
