@@ -112,6 +112,9 @@ func _on_begin_pressed() -> void:
 
 	level.add_child(scene.instantiate())
 
+	var map = level.get_node("World/Map")
+	map.spawn_features()
+
 	var world = level.get_node("World")
 
 	for p in lobby._players:
