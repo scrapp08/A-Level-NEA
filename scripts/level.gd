@@ -107,7 +107,7 @@ func _on_connect_pressed():
 
 
 func _on_begin_pressed() -> void:
-	var scene = load("res://scenes/world.tscn")
+	var scene = preload("res://scenes/world.tscn")
 	_remove_ui.rpc()
 
 	level.add_child(scene.instantiate())

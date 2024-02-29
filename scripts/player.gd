@@ -66,6 +66,8 @@ func _ready() -> void:
 		)
 
 	point.connect(get_parent().get_parent()._on_point)
+	
+	position = Vector3(0, 20, 0)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -231,8 +233,6 @@ func change_weapon() -> void:
 
 
 func add_ammo() -> void:
-	if not is_multiplayer_authority(): return
-
 	weapon.clip_size = weapon.max_clip_size
 	ammo.text = str(weapon.clip_size)
 
