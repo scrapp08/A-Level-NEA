@@ -233,13 +233,13 @@ func change_weapon() -> void:
 
 
 func add_ammo() -> void:
+	if not is_multiplayer_authority(): return
+	
 	weapon.clip_size = weapon.max_clip_size
 	ammo.text = str(weapon.clip_size)
 
 
 func activate_wall() -> void:
-	if not is_multiplayer_authority(): return
-	
 	var ws = wall_sprite.instantiate()
 	add_child(ws)
 

@@ -23,5 +23,5 @@ func _process(delta: float) -> void:
 func create_wall() -> void:
 	var w = wall.instantiate()
 	w.global_transform = global_transform
-	get_tree().get_root().add_child(w)
+	get_parent().get_parent().add_child(w)
 	queue_free()
