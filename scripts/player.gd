@@ -14,7 +14,7 @@ var weapon_index := 0
 var container_offset = Vector3(0.6, -1, -0.7)
 var tween: Tween
 
-var mouse_sensitivity = 700
+var mouse_sensitivity := 700
 var movement_velocity: Vector3
 var rotation_target: Vector3
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -39,8 +39,6 @@ var paused := false
 @onready var pause_menu: Control = $PauseMenu
 @onready var loadout: PanelContainer = $PauseMenu/MarginContainer/Loadout
 @onready var options: VBoxContainer = $PauseMenu/MarginContainer/Options
-
-@onready var loading_screen: PanelContainer = $LoadingScreen
 
 @onready var sound_footsteps: AudioStreamPlayer = $SoundFootsteps
 @onready var cooldown: Timer = $Cooldown
@@ -129,13 +127,6 @@ func _physics_process(delta: float) -> void:
 		camera.position.y = -0.1
 
 	previously_floored = is_on_floor()
-
-
-func _on_loading(state: bool) -> void:
-	if state == true:
-		loading_screen.show()
-	elif state == false:
-		loading_screen.hide()
 
 
 func _on_resume_pressed() -> void:
