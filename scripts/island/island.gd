@@ -122,6 +122,7 @@ func generate_island() -> void:
 		mesh.get_child(0).queue_free()
 	if collision:
 		mesh.create_trimesh_collision()
+		
 
 
 func _clear_vertices() -> void:

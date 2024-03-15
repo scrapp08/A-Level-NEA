@@ -4,6 +4,8 @@ const DEFAULT_SERVER_IP := "127.0.0.1" # IPv4 localhost
 const PORT := 9999
 const PLAYER := preload("res://objects/player.tscn")
 
+@export var debug_local_multiplayer := true
+
 var peer = null
 var score := {}
 
@@ -90,10 +92,12 @@ func _on_host_pressed():
 	lobby.add_player(1, name_edit.text)
 
 	start_game()
+	hostname.text = "DEFAULT_SERVER_IP"
 
 
 func _on_disconnect_pressed():
 	_close_network()
+	hostname.text = ""
 
 
 func _on_connect_pressed():

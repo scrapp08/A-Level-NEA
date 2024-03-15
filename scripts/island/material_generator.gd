@@ -14,10 +14,9 @@ static func generate_material_from_map(size : int, map : Array, render_mode : in
 				map[(x + 0) + (size + 1) * (y + 1)] +
 				map[(x + 1) + (size + 1) * (y + 1)])
 
-			if render_mode == 1:
+			if render_mode == 1 or render_mode == 2:
 				colour_map[y * size + x] = Color.BLACK.lerp(Color.WHITE, t)
-			else:
-				colour_map[y * size + x] = Color.WHITE.lerp(Color.BLACK, t)
+			
 			image.set_pixel(x, y, colour_map[y * size + x])
 
 	image.save_png("res://assets/heightmap.png")
