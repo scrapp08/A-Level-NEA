@@ -4,7 +4,7 @@ const DEFAULT_SERVER_IP := "127.0.0.1" # IPv4 localhost
 const PORT := 9999
 const PLAYER := preload("res://objects/player.tscn")
 
-@export var debug_local_multiplayer := true
+@export var debug_local_multiplayer: bool = true
 
 var peer = null
 var score := {}
@@ -92,7 +92,11 @@ func _on_host_pressed():
 	lobby.add_player(1, name_edit.text)
 
 	start_game()
-	hostname.text = "DEFAULT_SERVER_IP"
+	
+	if not debug_local_multiplayer:
+		_upnp_setup()
+	else:
+		hostname.text = DEFAULT_SERVER_IP
 
 
 func _on_disconnect_pressed():
@@ -101,7 +105,11 @@ func _on_disconnect_pressed():
 
 
 func _on_connect_pressed():
-	multiplayerPeer.create_client(DEFAULT_SERVER_IP, PORT)
+	if not debug_local_multiplayer:
+		multiplayerPeer.create_client(hostname.text, PORT)
+	else:
+		multiplayerPeer.create_client(DEFAULT_SERVER_IP, PORT)
+		hostname.text = DEFAULT_SERVER_IP
 	multiplayer.connection_failed.connect(_close_network)
 	multiplayer.connected_to_server.connect(_connected)
 
@@ -169,3 +177,21 @@ func update_score(score_value, player) -> void:
 		if blue_label.text == "4":
 			winner_text.text = "Blue wins!"
 			win_screen.show()
+
+
+func _upnp_setup():
+	var upnp = UPNP.new()
+	var discover_result = upnp.discover()
+
+	assert(discover_result == UPNP.UPNP_RESULT_SUCCESS, \
+		"UPNP Discover Failed! Error %s" % discover_result)
+
+	assert(upnp.get_gateway() and upnp.get_gateway().is_valid_gateway(), \
+		"UPNP Invalid Gateway!")
+
+	var map_result = upnp.add_port_mapping(PORT)
+	assert(map_result == UPNP.UPNP_RESULT_SUCCESS, \
+		"UPNP Port Mapping Failed! Error %s" % map_result)
+
+	print("Success! Join Address: %s" % upnp.query_external_address())
+	hostname.text = str(upnp.query_external_address())
