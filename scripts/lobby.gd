@@ -1,3 +1,4 @@
+# Handle player list in Main Menu
 extends Control
 
 @export var _players := []

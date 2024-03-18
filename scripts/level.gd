@@ -36,6 +36,7 @@ func _ready():
 
 
 func start_game():
+	# Handle UI when player connects
 	host_button.disabled = true
 	name_edit.editable = false
 	hostname.editable = false
@@ -45,6 +46,7 @@ func start_game():
 
 
 func stop_game():
+	# Handle UI when player disconnects
 	host_button.disabled = false
 	name_edit.editable = true
 	hostname.editable = true
@@ -54,6 +56,7 @@ func stop_game():
 
 
 func _close_network():
+	# Handle when host disconnects and thus closes network
 	if multiplayer.server_disconnected.is_connected(_close_network):
 		multiplayer.server_disconnected.disconnect(_close_network)
 	if multiplayer.connection_failed.is_connected(_close_network):
@@ -84,6 +87,7 @@ func _peer_disconnected(id):
 
 
 func _on_host_pressed():
+	# Host server and add host as player
 	multiplayerPeer.create_server(PORT)
 
 	multiplayer.server_disconnected.connect(_close_network)
@@ -95,6 +99,8 @@ func _on_host_pressed():
 	
 	if not debug_local_multiplayer:
 		_upnp_setup()
+		
+	# Debug for local multiplayer
 	else:
 		hostname.text = DEFAULT_SERVER_IP
 
@@ -107,9 +113,12 @@ func _on_disconnect_pressed():
 func _on_connect_pressed():
 	if not debug_local_multiplayer:
 		multiplayerPeer.create_client(hostname.text, PORT)
+	
+	# Debug for local multiplayer
 	else:
 		multiplayerPeer.create_client(DEFAULT_SERVER_IP, PORT)
 		hostname.text = DEFAULT_SERVER_IP
+	
 	multiplayer.connection_failed.connect(_close_network)
 	multiplayer.connected_to_server.connect(_connected)
 
@@ -119,15 +128,18 @@ func _on_connect_pressed():
 
 
 func _on_begin_pressed() -> void:
+	# Remove UI and load world scene
 	var scene = preload("res://scenes/world.tscn")
 	_remove_ui.rpc()
 
 	level.add_child(scene.instantiate())
-
+	
+	# Spawn natural features on terrain
 	var map = level.get_node("World/Map")
 	print("spawning features")
 	map.spawn_features()
 
+	# Add players to game
 	var world = level.get_node("World")
 
 	for p in lobby._players:
@@ -135,6 +147,7 @@ func _on_begin_pressed() -> void:
 
 
 func _on_point(player: String) -> void:
+	# Update scoreboard when player scores
 	score[player] += 1
 	if player == "1":
 		var red_score = score[player]
@@ -145,6 +158,7 @@ func _on_point(player: String) -> void:
 
 
 func _add_player(world, position) -> void:
+	# Add player character to game world
 	var player = PLAYER.instantiate()
 	player.name = str(position)
 	player.position = Vector3(0.0, 20.0, 0.0)
@@ -154,11 +168,13 @@ func _add_player(world, position) -> void:
 
 @rpc("call_local")
 func initialise_score(position) -> void:
+	# Set scoreboard for all players
 	score[str(position)] = 0
 
 
 @rpc("call_local")
 func _remove_ui() -> void:
+	# Remove Main Menu UI for all players when game begins
 	var ui = level.get_node("UI")
 	level.remove_child(ui)
 	ui.queue_free()
@@ -167,6 +183,7 @@ func _remove_ui() -> void:
 
 @rpc("call_local", "any_peer")
 func update_score(score_value, player) -> void:
+	# Update scoreboard for all players, and check for winner
 	if player == 1:
 		red_label.text = str(score_value)
 		if red_label.text == "4":
@@ -180,9 +197,11 @@ func update_score(score_value, player) -> void:
 
 
 func _upnp_setup():
+	# Setup UPnP multiplayer
 	var upnp = UPNP.new()
 	var discover_result = upnp.discover()
-
+	
+	# Handle UPnP Errors
 	assert(discover_result == UPNP.UPNP_RESULT_SUCCESS, \
 		"UPNP Discover Failed! Error %s" % discover_result)
 
@@ -193,5 +212,6 @@ func _upnp_setup():
 	assert(map_result == UPNP.UPNP_RESULT_SUCCESS, \
 		"UPNP Port Mapping Failed! Error %s" % map_result)
 
+	# Display IP address to host so other players can connect
 	print("Success! Join Address: %s" % upnp.query_external_address())
 	hostname.text = str(upnp.query_external_address())

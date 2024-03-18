@@ -18,33 +18,47 @@ var size_item := preload("res://objects/powerups/size_item.tscn")
 func spawn_features() -> void:
 	water_collision.disabled = false
 
+	# Spawn natural features
 	for i in range(0, 20):
+		# Locate position to spawn features
 		random_position = Vector3(randi_range(-100, 100), -100, randi_range(-100, 100))
 		ray_cast_3d.target_position = random_position
-
+		
+		# Update raycast to match new position, and get collider
 		ray_cast_3d.force_raycast_update()
 		var collider = ray_cast_3d.get_collider()
-
+		
+		# Check if spawn position is valid
 		if collider and collider.is_in_group("land") and not collider.is_in_group("water"):
+			# Spawn feature if valid and increase loop index
 			print("Spawning feature at: " + str(ray_cast_3d.get_collision_point()))
 			var feature := randi_range(1,3)
 			place_features.rpc(feature, ray_cast_3d.get_collision_point())
 			i += 1
+		
+		# Repeat loop if position is not valid
 		else:
 			i = i
 			
+	# Spawn powerups
 	for i in range(0, 10):
+		# Locate position to spawn powerups
 		random_position = Vector3(randi_range(-100, 100), -100, randi_range(-100, 100))
 		ray_cast_3d.target_position = random_position
 
+		# Update raycast to match new position, and get collider
 		ray_cast_3d.force_raycast_update()
 		var collider = ray_cast_3d.get_collider()
 
+		# Check if spawn position is valid
 		if collider and collider.is_in_group("land") and not collider.is_in_group("water"):
+			# Spawn feature if valid and increase loop index
 			print("Spawning feature at: " + str(ray_cast_3d.get_collision_point()))
 			var feature := randi_range(4,7)
 			place_features.rpc(feature, ray_cast_3d.get_collision_point())
 			i += 1
+		
+		# Repeat loop if position is not valid
 		else:
 			i = i
 
@@ -53,6 +67,7 @@ func spawn_features() -> void:
 
 @rpc("call_local")
 func place_features(feature: int, spawn_position: Vector3) -> void:
+	# Place random feature or powerup in determined position
 	if feature == 1:
 		var tree_object = tree.instantiate()
 		tree_object.position = spawn_position

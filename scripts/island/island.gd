@@ -95,15 +95,18 @@ func generate_island() -> void:
 	if falloff:
 		for y in resolution + 1:
 			for x in resolution + 1:
+				# For each point on the noise map, apply the falloff at that point
 				noise_map[x + (resolution + 1) * y] = noise_map[x + (resolution + 1) * y] * falloff_map[x + (resolution + 1) * y]
 
 	var mesh_array  = MeshGenerator.generate_mesh(size, resolution, noise_map, amplitude, render_vertices, mesh, min_height, max_height)
+	
+	# Unpack data from the MeshGenerator
 	mesh.mesh = mesh_array[0]
 	min_height = mesh_array[1]
 	max_height = mesh_array[2]
 
-
 	if render_mode == 0:
+		# Render the island with sand and grass gradient
 		var material := ShaderMaterial.new()
 		var shader := preload("res://shaders/island.gdshader")
 
@@ -113,18 +116,23 @@ func generate_island() -> void:
 		material.set_shader_parameter("terrain_colour", terrain_colour)
 
 		mesh.set_surface_override_material(0, material)
+	
+	# Debug falloff rendering
 	elif render_mode == 1:
-		mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(resolution, noise_map, render_mode))
+		mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(resolution, noise_map))
+	
+	# Debug noise rendering
 	elif render_mode == 2:
-		mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(resolution, falloff_map, render_mode))
-
+		mesh.set_surface_override_material(0, MaterialGenerator.generate_material_from_map(resolution, falloff_map))
+	
+	# Clear previous collision and create new collision
 	if mesh.get_child_count() > 0:
 		mesh.get_child(0).queue_free()
 	if collision:
 		mesh.create_trimesh_collision()
 		
 
-
+# Debug clear any previous vertices
 func _clear_vertices() -> void:
 	if not is_node_ready(): return
 	for i in mesh.get_children():

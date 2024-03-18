@@ -58,6 +58,7 @@ func _ready() -> void:
 
 	health.text = str(health_value)
 
+	# Set player weapon after 1 second to avoid weapon being set before player is ready
 	get_tree().create_timer(1).timeout.connect(func() -> void:
 		_on_item_list_item_selected(weapon_index)
 		ammo.text = str(weapon.clip_size)
@@ -71,10 +72,12 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_multiplayer_authority(): return
 
+	# Handle mouse movement
 	if event is InputEventMouseMotion and not paused:
 		rotation_target.y -= event.relative.x / mouse_sensitivity
 		rotation_target.x -= event.relative.y / mouse_sensitivity
 
+	# Handle input for pausing game
 	if Input.is_action_just_pressed("menu"):
 		if not paused:
 			_pause(true)
@@ -85,11 +88,14 @@ func _unhandled_input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority(): return
 
+	# Get player input vector and calculate resulting velocity
 	var input := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	movement_velocity = Vector3(input.x, 0, input.y).normalized() * movement_speed
-
+	
+	# Clamp camera rotation
 	rotation_target.x = clamp(rotation_target.x, deg_to_rad(-90), deg_to_rad(90))
-
+	
+	# Calculate jump and apply gravity
 	if Input.is_action_just_pressed("move_up") and is_on_floor():
 		gravity = -jump_strength
 
@@ -97,7 +103,8 @@ func _physics_process(delta: float) -> void:
 
 	if gravity > 0 and is_on_floor():
 		gravity = 0
-
+	
+	# Handle shooting
 	if Input.is_action_pressed("primary_attack"):
 		_action_shoot()
 
@@ -158,7 +165,8 @@ func _on_back_pressed() -> void:
 func recieve_damage(amount: int) -> void:
 	health_value -= amount
 	health.text = str(health_value)
-
+	
+	# Handle respawning player
 	if health_value <= 0:
 		health_value = 200
 		health.text = str(health_value)
@@ -168,6 +176,7 @@ func recieve_damage(amount: int) -> void:
 
 @rpc("call_local")
 func render_impact() -> void:
+	# Instantiate impact effect for all players at position of weapon raycast collision
 	var impact = preload("res://objects/impact.tscn")
 	var impact_instance = impact.instantiate()
 
@@ -180,6 +189,7 @@ func render_impact() -> void:
 
 @rpc("call_local")
 func muzzle_animation(weapon_muzzle: Vector3) -> void:
+	# Play weapon firing animation at position of weapon muzzle
 	muzzle.play("default")
 
 	muzzle.rotation_degrees.z = randf_range(-45, 45)
@@ -189,6 +199,7 @@ func muzzle_animation(weapon_muzzle: Vector3) -> void:
 
 @rpc("call_local")
 func initiate_change_weapon(index) -> void:
+	# Animation for changing player weapon
 	weapon_index = index
 
 	tween = get_tree().create_tween()
@@ -202,7 +213,7 @@ func change_weapon() -> void:
 
 	weapon = weapons[weapon_index]
 
-	# Step 1. Remove previous weapon model(s) from container
+	# Step 1. Remove previous weapon model from container
 	for n in container.get_children():
 		container.remove_child(n)
 
@@ -244,6 +255,7 @@ func increase_jump() -> void:
 func decrease_size() -> void:
 	if not is_multiplayer_authority(): return
 	
+	# Create new mesh and collider for new player size
 	var new_mesh := CapsuleMesh.new()
 	new_mesh.height = 1.0
 	new_mesh.radius = 0.25
@@ -260,6 +272,7 @@ func decrease_size() -> void:
 func _pause(status: bool) -> void:
 	if not is_multiplayer_authority(): return
 	
+	# Hide crosshair and display pause menu when pausing game. Also release mouse from window capture to allow player to select menu items.
 	if status:
 		Input.mouse_mode = Input.MOUSE_MODE_CONFINED
 		crosshair.hide()
